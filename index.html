@@ -9,7 +9,7 @@
     <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
+/*         $(document).ready(function(){
           $("#hide").click(function(){
             $("#GO").hide();
           });
@@ -17,6 +17,7 @@
             $("#GO").show();
           });
         });
+*/        
         $(document).ready(function(){
             var $select = $(".0-59");
             for (i=0;i<=59;i++){
@@ -34,8 +35,8 @@
 <body>
     
     Select Voice: <select id='voiceList'></select> <br>
-
-    <p>    Choose exercise type
+<br>
+    <p>    Choose exercise type:
     </p>
 
     <select name="exercise" id="exercise">
@@ -45,44 +46,44 @@
         <option value="Kick Backward">Kick Backward</option>
         <option value="Tiger Jump">Tiger Jump</option>
     </select>
-
-    <select name="timeLength" id="timeLength">
-        <option value=5">5</option>
-        <option value=15">15</option>
-        <option value=22">22</option>
-    </select>
-
-    <select id="timer_start_h" class="0-23"></select> hr
-    <select id="timer_start_m" class="0-59"></select> min
-    <select id="timer_start_s" class="0-59"></select> sec
-    <br>
-    <button id="GO" style="background-color:lightgreen;border-radius:10%;position:relative;margin:0 0 0 20px;padding:5px;" type="button" onclick="startTimer()"><i class="fas fa-hourglass-start"></i>GO</button>
-
     <br><br>
-    <button id='btnSpeak'>Speak!</button><br><br>
+    <p>Duration:</p>
+        <select id="timer_start_h" class="0-23"></select> hr  
+        <select id="timer_start_m" class="0-59"></select> min  
+        <select id="timer_start_s" class="0-59"></select> sec
+    
+        <br><br>
+        <p>Rest:</p>
+            <select id="timer_rest_h" class="0-23"></select> hr  
+            <select id="timer_rest_m" class="0-59"></select> min  
+            <select id="timer_rest_s" class="0-59"></select> sec
+<br><br><br><br>
+        
+<div style="background-color: beige;width: 50vw;padding:1%;" align=center>    
+<br>
+    <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
+    <h2><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:medium";>00:00:00</button></h2>
 
-    <h2>Timer: <button id="timer" style="background-color:yellow;padding:10px;border-radius:50%;font-size:20px";>00:00:00</button></h2>
-
-
-<    <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
-    <button type="button" id="hide" style="display:none;"></button>
-    <button type="button" id="show" style="display:none;"></button>
->
+    <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
 <br><br>
-    <div style="background-color:lightblue;width:50vw;border-radius:10px;padding:10px">
-    <h1 id="demo" align=center>00:00:00</h1>
+</div>
+    <div style="background-color:lightblue;width:50vw;border-radius:1%;padding:1%">
+    <br> Stop Watch:
+    <p id="demo" align=center>00:00:00</p>
     
     <div align=right>
     <button type="button" onclick="stop_Watch()">Stop</button>
     </div>
+
+
+
     <script>
-        var voiceList = document.querySelector('#voiceList');
-        var btnSpeak = document.querySelector('#btnSpeak');
-        var exercise = document.querySelector('#exercise');
-        var timeLength = document.querySelector('#timeLength');
-        var timer_start_h = document.querySelector('#timer_start_h');
-        var timer_start_m = document.querySelector('#timer_start_m');
-        var timer_start_s = document.querySelector('#timer_start_s');
+        var voiceList       = document.querySelector('#voiceList');
+        var btnGO           = document.querySelector('#btnGO');
+        var exercise        = document.querySelector('#exercise');
+        var timer_start_h   = document.querySelector('#timer_start_h');
+        var timer_start_m   = document.querySelector('#timer_start_m');
+        var timer_start_s   = document.querySelector('#timer_start_s');
         var synth = window.speechSynthesis;
         var voices = [];
 
@@ -91,40 +92,41 @@
             speechSynthesis.onvoiceschanged = PopulateVoices;
         }
 
-        btnSpeak.addEventListener('click', () => {
+        btnGO.addEventListener('click', () => {
             let lnExercise = exercise.value + ' for ' ;
             let lnTime = '';
 
-            lnTime = formatSpeakTime (lnTime);
+            lnTime = formatSpeakTime (lnTime, timer_start_h.value, timer_start_m.value, timer_start_s.value);
             if (lnTime != '') {
                 speakLine(lnExercise + lnTime);
                 clearTimer();               // to pause timer on screen
                 setTimeout (startTimer, 3000);
+                startTimer();
             }             
         });
 
-        async function finishSpeakLine (line) {
+/*        async function finishSpeakLine (line) {
             let speakLineFinished = new Promise (function (resolve) {
                 speakLine (line);
                 resolve ("Line Spoke");
             });
             await speakLineFinished;
         }
-
-        function formatSpeakTime (lnTime) {
-            if (timer_start_h.value > 0) {
-                lnTime += timer_start_h.value + ' hour';
-                if (timer_start_h.value > 1) lnTime += 's';
+*/
+        function formatSpeakTime (lnTime, hh, mm, ss) {
+            if (hh > 0) {
+                lnTime += hh + ' hour';
+                if (hh > 1) lnTime += 's';
             }
-            if (timer_start_m.value > 0) {
-                if (lnTime && timer_start_s.value == 0) lnTime += ' and ' + timer_start_m.value + ' minute'
-                    else lnTime += ' ' + timer_start_m.value + ' minute';
-                if (timer_start_m.value > 1) lnTime += 's';
+            if (mm > 0) {
+                if (lnTime && ss == 0) lnTime += ' and ' + mm + ' minute'
+                    else lnTime += ' ' + mm + ' minute';
+                if (mm > 1) lnTime += 's';
             }
-            if (timer_start_s.value > 0) {
-                if (lnTime) lnTime += ' and ' + timer_start_s.value + ' second'
-                    else lnTime += ' ' + timer_start_s.value + ' second';
-                if (timer_start_s.value > 1) lnTime += 's';
+            if (ss > 0) {
+                if (lnTime) lnTime += ' and ' + ss + ' second'
+                    else lnTime += ' ' + ss + ' second';
+                if (ss > 1) lnTime += 's';
             }
             return (lnTime);
         }
@@ -230,13 +232,13 @@
     function runTimer() {
         clearInterval(timer1);
         timer1 = setInterval(myTimer, 1000);
-        document.getElementById("GO").disabled = true;
+    //    document.getElementById("GO").disabled = true;
     //    document.getElementById("hide").click();
         
     }
     function clearTimer() {
         clearInterval(timer1);
-        document.getElementById("GO").disabled = false;
+    //    document.getElementById("GO").disabled = false;
     //    document.getElementById("show").click();
     }
     
