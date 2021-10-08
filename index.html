@@ -62,7 +62,7 @@
 <div style="background-color: beige;width: 50vw;padding:1%;" align=center>    
 <br>
     <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
-    <h2><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:medium";>00:00:00</button></h2>
+    <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
 
     <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
 <br><br>
@@ -101,7 +101,6 @@
                 speakLine(lnExercise + lnTime);
                 clearTimer();               // to pause timer on screen
                 setTimeout (startTimer, 3000);
-                startTimer();
             }             
         });
 
