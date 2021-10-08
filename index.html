@@ -4,22 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Test Interval Timer</title>
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+          $("#hide").click(function(){
+            $("#GO").hide();
+          });
+          $("#show").click(function(){
+            $("#GO").show();
+          });
+        });
+        $(document).ready(function(){
+            var $select = $(".0-59");
+            for (i=0;i<=59;i++){
+                $select.append($('<option></option>').val(i).html(i))
+            }
+        });
+        $(document).ready(function(){
+            var $select = $(".0-23");
+            for (i=0;i<=23;i++){
+                $select.append($('<option></option>').val(i).html(i))
+            }
+        });
+        </script>
 </head>
 <body>
     
-    Select Voice: <select id='voiceList'></select> <br><br>
-    
-    <p>    Type a sentence in the textbox and press Speak button:
+    Select Voice: <select id='voiceList'></select> <br>
+
+    <p>    Choose exercise type
     </p>
 
-    <input id='txtInput' /> <br><br>    
-    <button id='btnSpeak'>Speak!</button>
+    <select name="exercise" id="exercise">
+        <option value="Fast Feet">Fast Feet</option>
+        <option value="Jump Up">Jump Up</option>
+        <option value="Squat Left and Right">Squat Left and Right</option>
+        <option value="Kick Backward">Kick Backward</option>
+        <option value="Tiger Jump">Tiger Jump</option>
+    </select>
 
+    <select name="timeLength" id="timeLength">
+        <option value=5">5</option>
+        <option value=15">15</option>
+        <option value=22">22</option>
+    </select>
+
+    <select id="timer_start_h" class="0-23"></select> hr
+    <select id="timer_start_m" class="0-59"></select> min
+    <select id="timer_start_s" class="0-59"></select> sec
+    <br>
+    <button id="GO" style="background-color:lightgreen;border-radius:10%;position:relative;margin:0 0 0 20px;padding:5px;" type="button" onclick="startTimer()"><i class="fas fa-hourglass-start"></i>GO</button>
+
+    <br><br>
+    <button id='btnSpeak'>Speak!</button><br><br>
+
+    <h2>Timer: <button id="timer" style="background-color:yellow;padding:10px;border-radius:50%;font-size:20px";>00:00:00</button></h2>
+
+
+<    <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
+    <button type="button" id="hide" style="display:none;"></button>
+    <button type="button" id="show" style="display:none;"></button>
+>
+<br><br>
+    <div style="background-color:lightblue;width:50vw;border-radius:10px;padding:10px">
+    <h1 id="demo" align=center>00:00:00</h1>
+    
+    <div align=right>
+    <button type="button" onclick="stop_Watch()">Stop</button>
+    </div>
     <script>
-        var txtInput = document.querySelector('#txtInput');
         var voiceList = document.querySelector('#voiceList');
         var btnSpeak = document.querySelector('#btnSpeak');
+        var exercise = document.querySelector('#exercise');
+        var timeLength = document.querySelector('#timeLength');
+        var timer_start_h = document.querySelector('#timer_start_h');
+        var timer_start_m = document.querySelector('#timer_start_m');
+        var timer_start_s = document.querySelector('#timer_start_s');
         var synth = window.speechSynthesis;
         var voices = [];
 
@@ -28,17 +91,54 @@
             speechSynthesis.onvoiceschanged = PopulateVoices;
         }
 
-        btnSpeak.addEventListener('click', ()=> {
-            var toSpeak = new SpeechSynthesisUtterance(txtInput.value);
+        btnSpeak.addEventListener('click', () => {
+            let lnExercise = exercise.value + ' for ' ;
+            let lnTime = '';
+
+            lnTime = formatSpeakTime (lnTime);
+            if (lnTime != '') {
+                speakLine(lnExercise + lnTime);
+                clearTimer();               // to pause timer on screen
+                setTimeout (startTimer, 3000);
+            }             
+        });
+
+        async function finishSpeakLine (line) {
+            let speakLineFinished = new Promise (function (resolve) {
+                speakLine (line);
+                resolve ("Line Spoke");
+            });
+            await speakLineFinished;
+        }
+
+        function formatSpeakTime (lnTime) {
+            if (timer_start_h.value > 0) {
+                lnTime += timer_start_h.value + ' hour';
+                if (timer_start_h.value > 1) lnTime += 's';
+            }
+            if (timer_start_m.value > 0) {
+                if (lnTime && timer_start_s.value == 0) lnTime += ' and ' + timer_start_m.value + ' minute'
+                    else lnTime += ' ' + timer_start_m.value + ' minute';
+                if (timer_start_m.value > 1) lnTime += 's';
+            }
+            if (timer_start_s.value > 0) {
+                if (lnTime) lnTime += ' and ' + timer_start_s.value + ' second'
+                    else lnTime += ' ' + timer_start_s.value + ' second';
+                if (timer_start_s.value > 1) lnTime += 's';
+            }
+            return (lnTime);
+        }
+
+        function speakLine(line) {
+            var toSpeak = new SpeechSynthesisUtterance(line);
             var selectedVoiceName = voiceList.selectedOptions[0].getAttribute('data-name');
             voices.forEach((voice)=>{
                 if(voice.name === selectedVoiceName){
                     toSpeak.voice = voice;
                 }
             });
-            synth.speak(toSpeak);
-        });
-
+            setTimeout (synth.speak(toSpeak), 3000);
+        }
         function PopulateVoices(){
             voices = synth.getVoices();
             var selectedIndex = voiceList.selectedIndex < 0 ? 0 : voiceList.selectedIndex;
@@ -50,9 +150,100 @@
                 listItem.setAttribute('data-name', voice.name);
                 voiceList.appendChild(listItem);
             });
-
             voiceList.selectedIndex = selectedIndex;
         }
+</script>
+<script>
+    let ss = new Date();
+    var timer_set_h = 0;
+    var timer_set_m = 0;
+    var timer_set_s = 0;
+    var paused = false;
+    var timer1;
+    
+    var stopWatch = setInterval(myFunction, 1000);
+    
+    function myFunction() {
+      let curr_date = new Date();
+      let time_diff = new Date();
+      time_diff.setTime(curr_date.getTime() - ss.getTime());
+      
+      document.getElementById("demo").innerHTML=
+          ("0" + time_diff.getUTCHours()).substr(-2) + ":" +
+          ("0" + time_diff.getUTCMinutes()).substr(-2) + ":" +
+          ("0" + time_diff.getUTCSeconds()).substr(-2);
+    }
+    
+    function startTimer() {
+    
+        timer_set_h = parseInt(document.getElementById("timer_start_h").value );
+        timer_set_m = parseInt(document.getElementById("timer_start_m").value );
+        timer_set_s = parseInt(document.getElementById("timer_start_s").value )+1;
+    
+        runTimer();
+    }
+    
+    function pauseResumeTimer() {
+        if (paused === false) {
+            paused = true;
+            clearTimer();
+        }
+        else {
+            paused = false;
+            runTimer();
+        }
+    }
+    
+    function myTimer() {
+    
+    if (timer_set_h === 0 &&
+           timer_set_m === 0 &&
+        timer_set_s === 0) {
+               clearTimer();
+        }
+    else if (timer_set_s === 0) {
+               timer_set_s = 59;
+            
+                if (timer_set_m === 0) {
+                   timer_set_m = 59;
+                timer_set_h -= 1;
+               }
+               else {
+                   timer_set_m -=1;
+               }
+         }
+         else
+         {
+               timer_set_s -=1;
+         }
+                    
+    if (timer_set_h === 0 && timer_set_m === 0 && timer_set_s <= 5 && timer_set_s > 0)
+        speakLine (timer_set_s);
+
+    document.getElementById("timer").innerHTML= 
+             ("0" + timer_set_h).substr(-2) + ":" +
+              ("0" + timer_set_m).substr(-2) + ":" +
+              ("0" + timer_set_s).substr(-2);
+
+    }
+    
+    function runTimer() {
+        clearInterval(timer1);
+        timer1 = setInterval(myTimer, 1000);
+        document.getElementById("GO").disabled = true;
+    //    document.getElementById("hide").click();
+        
+    }
+    function clearTimer() {
+        clearInterval(timer1);
+        document.getElementById("GO").disabled = false;
+    //    document.getElementById("show").click();
+    }
+    
+    function stop_Watch() {
+        clearInterval(stopWatch);
+    }
+    
     </script>
-</body>
+    </body>
 </html>
