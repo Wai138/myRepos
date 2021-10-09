@@ -59,14 +59,14 @@
     </div>
 
     <div style="background-color:lightblue;width:100vw;border-radius:1%;padding:1%">
-        <div align=right id="clockTime"></div>
-        <br> Stop Watch:
+        <div align=left>Time: </div>
+        <div align=left id="clockTime"></div>
+        <br> <div align=center>Stop Watch</div>
         <p id="stopWatch" align=center>00:00:00</p>
     
-        <div align=right>
+        <div align=center>
             <button type="button" onclick="resetStopWatch()">Reset</button>
-            <button type="button" onclick="resumeStopWatch()">Resume</button>
-            <button type="button" onclick="lapStopWatch()">Lap</button>
+            <button type="button" onclick="startStopWatch()">Start</button>
             <button type="button" onclick="stopStopWatch()">Stop</button>
         </div>
     </div>
@@ -164,18 +164,19 @@
         var timer_set_s = 0;
         var paused = false;
         var exerciseTimer;
-        var stopWatch_hh;
-        var stopWatch_mm;
-        var stopWatch_ss;
+        var stopWatch_hh = 0;
+        var stopWatch_mm = 0;
+        var stopWatch_ss = 0;
         var stopWatchStartTime;
+        var stopWatch;
         
         var clock     = setInterval(clockFcn, 1000);
 
         startStopWatch ();
         
         function startStopWatch () {
-            stopWatchStartTime = new Date();
-            var stopWatch = setInterval(stopWatchFcn, 1000);
+            stopStopWatch();
+            stopWatch = setInterval(stopWatchFcn, 1000);
         }
 
         function stopStopWatch() {
@@ -183,25 +184,31 @@
         }
 
         function resetStopWatch() {
-            clearInterval(stopWatch);
-        }
-
-        function getStopWatchFromScreen () {
-            let currStopWatchTime = document.getElementById("stopWatch").innerHTML;
-            stopWatch_hh = parseInt (currStopWatchTime.substr(0,2));
-            stopWatch_mm = parseInt (currStopWatchTime.substr(3,2));
-            stopWatch_ss = parseInt (currStopWatchTime.substr(6,2));            
+            stopStopWatch ();
+            stopWatch_hh = 0;
+            stopWatch_mm = 0;
+            stopWatch_ss = 0;
+            displayStopWatch ();
         }
         
         function stopWatchFcn() {
-            let clock_date = new Date();
-            let time_diff = new Date();
-            time_diff.setTime(clock_date.getTime() - stopWatchStartTime.getTime());
-            
+            if (stopWatch_ss < 59) stopWatch_ss += 1
+                else {
+                    stopWatch_ss = 0;
+                    if (stopWatch_mm < 59) stopWatch_mm += 1
+                        else {
+                            stopWatch_mm = 0;
+                            stopWatch_hh += 1
+                        }
+                }
+            displayStopWatch ();
+        }
+
+        function displayStopWatch () {
             document.getElementById("stopWatch").innerHTML=
-                ("0" + time_diff.getUTCHours()).substr(-2) + ":" +
-                ("0" + time_diff.getUTCMinutes()).substr(-2) + ":" +
-                ("0" + time_diff.getUTCSeconds()).substr(-2);
+                ("0" + stopWatch_hh).substr(-2) + ":" +
+                ("0" + stopWatch_mm).substr(-2) + ":" +
+                ("0" + stopWatch_ss).substr(-2);
         }
 
         function clockFcn() {
