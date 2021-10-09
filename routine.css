@@ -1,0 +1,17 @@
+.routineButt {
+    height: 50%;
+    width: 100%;
+    background-color: lightpink;
+}
+
+#routineContainer {
+    background-color: lightblue;
+    height: 20vw;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.routineButt:hover {
+    background-color: yellow;
+}
