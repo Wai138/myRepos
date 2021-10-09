@@ -8,16 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-/*         $(document).ready(function(){
-          $("#hide").click(function(){
-            $("#GO").hide();
-          });
-          $("#show").click(function(){
-            $("#GO").show();
-          });
-        });
-*/        
+        <script>
         $(document).ready(function(){
             var $select = $(".0-59");
             for (i=0;i<=59;i++){
@@ -30,12 +21,12 @@
                 $select.append($('<option></option>').val(i).html(i))
             }
         });
-        </script>
+    </script>
 </head>
 <body>
     
     Select Voice: <select id='voiceList'></select> <br>
-<br>
+    <br>
     <p>    Choose exercise type:
     </p>
 
@@ -48,34 +39,38 @@
     </select>
     <br><br>
     <p>Duration:</p>
-        <select id="timer_start_h" class="0-23"></select> hr  
-        <select id="timer_start_m" class="0-59"></select> min  
-        <select id="timer_start_s" class="0-59"></select> sec
-    
-        <br><br>
-        <p>Rest:</p>
-            <select id="timer_rest_h" class="0-23"></select> hr  
-            <select id="timer_rest_m" class="0-59"></select> min  
-            <select id="timer_rest_s" class="0-59"></select> sec
-<br><br><br><br>
-        
-<div style="background-color: beige;width: 50vw;padding:1%;" align=center>    
-<br>
-    <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
-    <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
+    <select id="timer_start_h" class="0-23"></select> hr  
+    <select id="timer_start_m" class="0-59"></select> min  
+    <select id="timer_start_s" class="0-59"></select> sec
 
-    <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
-<br><br>
-</div>
-    <div style="background-color:lightblue;width:50vw;border-radius:1%;padding:1%">
-    <br> Stop Watch:
-    <p id="demo" align=center>00:00:00</p>
-    
-    <div align=right>
-    <button type="button" onclick="stop_Watch()">Stop</button>
+    <br><br>
+    <p>Rest:</p>
+        <select id="timer_rest_h" class="0-23"></select> hr  
+        <select id="timer_rest_m" class="0-59"></select> min  
+        <select id="timer_rest_s" class="0-59"></select> sec
+    <br><br><br><br>
+        
+    <div style="background-color: beige;width: 50vw;padding:1%;" align=center>    
+    <br>
+        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
+        <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
+
+        <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
+    <br><br>
     </div>
 
-
+    <div style="background-color:lightblue;width:50vw;border-radius:1%;padding:1%">
+        <div align=right id="clockTime"></div>
+        <br> Stop Watch:
+        <p id="stopWatch" align=center>00:00:00</p>
+    
+        <div align=right>
+            <button type="button" onclick="resetStopWatch()">Reset</button>
+            <button type="button" onclick="resumeStopWatch()">Resume</button>
+            <button type="button" onclick="lapStopWatch()">Lap</button>
+            <button type="button" onclick="stopStopWatch()">Stop</button>
+        </div>
+    </div>
 
     <script>
         var voiceList       = document.querySelector('#voiceList');
@@ -84,8 +79,12 @@
         var timer_start_h   = document.querySelector('#timer_start_h');
         var timer_start_m   = document.querySelector('#timer_start_m');
         var timer_start_s   = document.querySelector('#timer_start_s');
+        var timer_rest_h    = document.querySelector('#timer_rest_h');
+        var timer_rest_m    = document.querySelector('#timer_rest_m');
+        var timer_rest_s    = document.querySelector('#timer_rest_s');
         var synth = window.speechSynthesis;
         var voices = [];
+        var restAlready = false;
 
         PopulateVoices();
         if(speechSynthesis !== undefined){
@@ -93,25 +92,25 @@
         }
 
         btnGO.addEventListener('click', () => {
-            let lnExercise = exercise.value + ' for ' ;
-            let lnTime = '';
+            timer_set_h = parseInt(document.getElementById("timer_start_h").value );
+            timer_set_m = parseInt(document.getElementById("timer_start_m").value );
+            timer_set_s = parseInt(document.getElementById("timer_start_s").value )+1;
 
-            lnTime = formatSpeakTime (lnTime, timer_start_h.value, timer_start_m.value, timer_start_s.value);
-            if (lnTime != '') {
-                speakLine(lnExercise + lnTime);
-                clearTimer();               // to pause timer on screen
-                setTimeout (startTimer, 3000);
-            }             
+            restAlready = false;
+            runActivity(exercise.value + ' for ', timer_start_h.value, timer_start_m.value, timer_start_s.value);
         });
 
-/*        async function finishSpeakLine (line) {
-            let speakLineFinished = new Promise (function (resolve) {
-                speakLine (line);
-                resolve ("Line Spoke");
-            });
-            await speakLineFinished;
+        function runActivity(msg, hh, mm, ss) {
+            let lnTime = '';
+
+            lnTime = formatSpeakTime (lnTime, hh, mm, ss);
+            if (lnTime != '') {
+                speakLine(msg + lnTime);
+                clearTimer();               // to pause timer on screen
+                setTimeout (startTimer, 3000)
+            }             
         }
-*/
+
         function formatSpeakTime (lnTime, hh, mm, ss) {
             if (hh > 0) {
                 lnTime += hh + ' hour';
@@ -140,6 +139,7 @@
             });
             setTimeout (synth.speak(toSpeak), 3000);
         }
+
         function PopulateVoices(){
             voices = synth.getVoices();
             var selectedIndex = voiceList.selectedIndex < 0 ? 0 : voiceList.selectedIndex;
@@ -153,98 +153,166 @@
             });
             voiceList.selectedIndex = selectedIndex;
         }
-</script>
-<script>
-    let ss = new Date();
-    var timer_set_h = 0;
-    var timer_set_m = 0;
-    var timer_set_s = 0;
-    var paused = false;
-    var timer1;
-    
-    var stopWatch = setInterval(myFunction, 1000);
-    
-    function myFunction() {
-      let curr_date = new Date();
-      let time_diff = new Date();
-      time_diff.setTime(curr_date.getTime() - ss.getTime());
-      
-      document.getElementById("demo").innerHTML=
-          ("0" + time_diff.getUTCHours()).substr(-2) + ":" +
-          ("0" + time_diff.getUTCMinutes()).substr(-2) + ":" +
-          ("0" + time_diff.getUTCSeconds()).substr(-2);
-    }
-    
-    function startTimer() {
-    
-        timer_set_h = parseInt(document.getElementById("timer_start_h").value );
-        timer_set_m = parseInt(document.getElementById("timer_start_m").value );
-        timer_set_s = parseInt(document.getElementById("timer_start_s").value )+1;
-    
-        runTimer();
-    }
-    
-    function pauseResumeTimer() {
-        if (paused === false) {
-            paused = true;
-            clearTimer();
+
+//===============================================================
+
+        var timer_set_h = 0;
+        var timer_set_m = 0;
+        var timer_set_s = 0;
+        var paused = false;
+        var exerciseTimer;
+        var stopWatch_hh;
+        var stopWatch_mm;
+        var stopWatch_ss;
+        var stopWatchStartTime;
+        
+        var clock     = setInterval(clockFcn, 1000);
+
+        startStopWatch ();
+        
+        function startStopWatch () {
+            stopWatchStartTime = new Date();
+            var stopWatch = setInterval(stopWatchFcn, 1000);
         }
-        else {
-            paused = false;
+
+        function stopStopWatch() {
+            clearInterval(stopWatch);
+        }
+
+        function resetStopWatch() {
+            clearInterval(stopWatch);
+        }
+
+        function getStopWatchFromScreen () {
+            let currStopWatchTime = document.getElementById("stopWatch").innerHTML;
+            stopWatch_hh = parseInt (currStopWatchTime.substr(0,2));
+            stopWatch_mm = parseInt (currStopWatchTime.substr(3,2));
+            stopWatch_ss = parseInt (currStopWatchTime.substr(6,2));            
+        }
+        
+        function stopWatchFcn() {
+            let clock_date = new Date();
+            let time_diff = new Date();
+            time_diff.setTime(clock_date.getTime() - stopWatchStartTime.getTime());
+            
+            document.getElementById("stopWatch").innerHTML=
+                ("0" + time_diff.getUTCHours()).substr(-2) + ":" +
+                ("0" + time_diff.getUTCMinutes()).substr(-2) + ":" +
+                ("0" + time_diff.getUTCSeconds()).substr(-2);
+        }
+
+        function clockFcn() {
+            let clock_date = new Date();
+
+            document.getElementById("clockTime").innerHTML=
+            ("0" + clock_date.getUTCHours()).substr(-2) + ":" +
+            ("0" + clock_date.getUTCMinutes()).substr(-2) + ":" +
+            ("0" + clock_date.getUTCSeconds()).substr(-2);
+        }
+        
+        function startTimer() {
+        
             runTimer();
         }
-    }
-    
-    function myTimer() {
-    
-    if (timer_set_h === 0 &&
-           timer_set_m === 0 &&
-        timer_set_s === 0) {
-               clearTimer();
-        }
-    else if (timer_set_s === 0) {
-               timer_set_s = 59;
-            
-                if (timer_set_m === 0) {
-                   timer_set_m = 59;
-                timer_set_h -= 1;
-               }
-               else {
-                   timer_set_m -=1;
-               }
-         }
-         else
-         {
-               timer_set_s -=1;
-         }
-                    
-    if (timer_set_h === 0 && timer_set_m === 0 && timer_set_s <= 5 && timer_set_s > 0)
-        speakLine (timer_set_s);
-
-    document.getElementById("timer").innerHTML= 
-             ("0" + timer_set_h).substr(-2) + ":" +
-              ("0" + timer_set_m).substr(-2) + ":" +
-              ("0" + timer_set_s).substr(-2);
-
-    }
-    
-    function runTimer() {
-        clearInterval(timer1);
-        timer1 = setInterval(myTimer, 1000);
-    //    document.getElementById("GO").disabled = true;
-    //    document.getElementById("hide").click();
         
-    }
-    function clearTimer() {
-        clearInterval(timer1);
-    //    document.getElementById("GO").disabled = false;
-    //    document.getElementById("show").click();
-    }
-    
-    function stop_Watch() {
-        clearInterval(stopWatch);
-    }
-    
+        function pauseResumeTimer() {
+            if (paused === false) {
+                paused = true;
+                clearTimer();
+            }
+            else {
+                paused = false;
+                runTimer();
+            }
+        }
+        
+        function exerciseTimerFcn() {
+        
+        if (timer_set_h === 0 &&
+            timer_set_m === 0 &&
+            timer_set_s === 0) {
+                clearTimer();
+                let temp_h = parseInt(document.getElementById("timer_rest_h").value );
+                    temp_m = parseInt(document.getElementById("timer_rest_m").value );
+                    temp_s = parseInt(document.getElementById("timer_rest_s").value );
+                if (!restAlready && (temp_h || temp_m || temp_s)) {
+                    timer_set_h = temp_h;
+                    timer_set_m = temp_m;
+                    timer_set_s = temp_s;
+                    runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
+                    restAlready = true;
+                }
+                                }
+        else if (timer_set_s === 0) {
+                timer_set_s = 59;
+                
+                    if (timer_set_m === 0) {
+                    timer_set_m = 59;
+                    timer_set_h -= 1;
+                }
+                else {
+                    timer_set_m -=1;
+                }
+            }
+            else
+            {
+                timer_set_s -=1;
+            }
+                        
+        if (timer_set_h === 0 && timer_set_m === 0 && timer_set_s <= 5 && timer_set_s > 0)
+            speakLine (timer_set_s);
+
+        document.getElementById("timer").innerHTML= 
+                ("0" + timer_set_h).substr(-2) + ":" +
+                ("0" + timer_set_m).substr(-2) + ":" +
+                ("0" + timer_set_s).substr(-2);
+
+        }
+/*            
+        function runTimer(callback) {
+                clearInterval(exerciseTimer);
+                exerciseTimer = callback (setInterval(exerciseTimerFcn, 1000));
+        }
+
+        async function runTimer() {
+            const timerFinished = new Promise (function (resolve) {
+                clearInterval(exerciseTimer);
+                exerciseTimer = setInterval(exerciseTimerFcn, 1000);
+                resolve ("Timer finished");
+            })
+            return (await timerFinished);
+        }
+*/
+        function runTimer() {
+//                let timerFinished = new Promise (function (resolve) {
+                clearInterval(exerciseTimer);
+                exerciseTimer = setInterval(exerciseTimerFcn, 1000);
+/*                    resolve ("Timer finished");
+            });
+            timerFinished.then((msg) => {
+                console.log(msg)
+                if (timesUp) {
+                    timesUp = false;
+                    runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
+                }
+            });
+*/            }
+
+/*            async function finishSpeakLine () {
+        let speakLineFinished = new Promise (function (resolve) {
+            
+            resolve ();
+        });
+        let b = await speakLineFinished;
+        }
+*/
+
+        function clearTimer() {
+            clearInterval(exerciseTimer);
+        //    document.getElementById("GO").disabled = false;
+        //    document.getElementById("show").click();
+        }
+        
     </script>
-    </body>
+</body>
 </html>
