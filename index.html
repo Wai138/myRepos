@@ -102,12 +102,15 @@
 
         function runActivity(msg, hh, mm, ss) {
             let lnTime = '';
+            let toSpk;
 
             lnTime = formatSpeakTime (lnTime, hh, mm, ss);
             if (lnTime != '') {
-                speakLine(msg + lnTime);
+                toSpk = speakLine(msg + lnTime);
                 clearTimer();               // to pause timer on screen
-                runTimer();
+                toSpk.onend = function(event) {
+                    runTimer();
+                }
             }             
         }
 
@@ -138,8 +141,7 @@
                 }
             });
             synth.speak(toSpeak);
-            toSpeak.onend = function(event) {
-            }
+            return (toSpeak);
        }
 
         function PopulateVoices(){
