@@ -107,8 +107,7 @@
             if (lnTime != '') {
                 speakLine(msg + lnTime);
                 clearTimer();               // to pause timer on screen
-                startTimer();
-                //               setTimeout (startTimer, 3000)
+                runTimer();
             }             
         }
 
@@ -141,8 +140,7 @@
             synth.speak(toSpeak);
             toSpeak.onend = function(event) {
             }
-//            setTimeout (synth.speak(toSpeak), 3000);
-        }
+       }
 
         function PopulateVoices(){
             voices = synth.getVoices();
@@ -214,11 +212,6 @@
             ("0" + clock_date.getUTCSeconds()).substr(-2);
         }
         
-        function startTimer() {
-        
-            runTimer();
-        }
-        
         function pauseResumeTimer() {
             if (paused === false) {
                 paused = true;
@@ -231,19 +224,9 @@
         }
 
         function runTimer() {
-//                let timerFinished = new Promise (function (resolve) {
                 clearInterval(exerciseTimer);
                 exerciseTimer = setInterval(exerciseTimerFcn, 1000);
-/*                    resolve ("Timer finished");
-            });
-            timerFinished.then((msg) => {
-                console.log(msg)
-                if (timesUp) {
-                    timesUp = false;
-                    runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
-                }
-            });
-*/            }
+        }
        
         function exerciseTimerFcn() {
         
@@ -289,30 +272,6 @@
                 ("0" + timer_set_s).substr(-2);
 
         }
-/*            
-        function runTimer(callback) {
-                clearInterval(exerciseTimer);
-                exerciseTimer = callback (setInterval(exerciseTimerFcn, 1000));
-        }
-
-        async function runTimer() {
-            const timerFinished = new Promise (function (resolve) {
-                clearInterval(exerciseTimer);
-                exerciseTimer = setInterval(exerciseTimerFcn, 1000);
-                resolve ("Timer finished");
-            })
-            return (await timerFinished);
-        }
-*/
-
-/*            async function finishSpeakLine () {
-        let speakLineFinished = new Promise (function (resolve) {
-            
-            resolve ();
-        });
-        let b = await speakLineFinished;
-        }
-*/
 
         function clearTimer() {
             clearInterval(exerciseTimer);
