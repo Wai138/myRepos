@@ -107,7 +107,8 @@
             if (lnTime != '') {
                 speakLine(msg + lnTime);
                 clearTimer();               // to pause timer on screen
-                setTimeout (startTimer, 3000)
+                startTimer();
+                //               setTimeout (startTimer, 3000)
             }             
         }
 
@@ -137,7 +138,10 @@
                     toSpeak.voice = voice;
                 }
             });
-            setTimeout (synth.speak(toSpeak), 3000);
+            synth.speak(toSpeak);
+            toSpeak.onend = function(event) {
+            }
+//            setTimeout (synth.speak(toSpeak), 3000);
         }
 
         function PopulateVoices(){
