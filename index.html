@@ -49,7 +49,7 @@
         <select id="timer_rest_s" class="0-59"></select> sec
     <br><br><br><br>
         
-    <div style="background-color: beige;width: 100vw;padding:1%;" align=center>    
+    <div id="timerBlock" style="background-color: beige;width: 100vw;padding:1%;" align=center>    
     <br>
         <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
         <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
@@ -251,8 +251,10 @@
                     timer_set_s = temp_s;
                     runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
                     restAlready = true;
+                    document.getElementById("timerBlock").style.backgroundColor = "lightgreen";
                 } else {
                     speakLine (exercise.value + ' finished');
+                    document.getElementById("timerBlock").style.backgroundColor = "beige";
                 }
         }
         else if (timer_set_s === 0) {
