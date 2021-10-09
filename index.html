@@ -225,7 +225,22 @@
                 runTimer();
             }
         }
-        
+
+        function runTimer() {
+//                let timerFinished = new Promise (function (resolve) {
+                clearInterval(exerciseTimer);
+                exerciseTimer = setInterval(exerciseTimerFcn, 1000);
+/*                    resolve ("Timer finished");
+            });
+            timerFinished.then((msg) => {
+                console.log(msg)
+                if (timesUp) {
+                    timesUp = false;
+                    runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
+                }
+            });
+*/            }
+       
         function exerciseTimerFcn() {
         
         if (timer_set_h === 0 &&
@@ -241,8 +256,10 @@
                     timer_set_s = temp_s;
                     runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
                     restAlready = true;
+                } else {
+                    speakLine (exercise.value + ' finished');
                 }
-                                }
+        }
         else if (timer_set_s === 0) {
                 timer_set_s = 59;
                 
@@ -251,12 +268,12 @@
                     timer_set_h -= 1;
                 }
                 else {
-                    timer_set_m -=1;
+                    timer_set_m -= 1;
                 }
             }
             else
             {
-                timer_set_s -=1;
+                timer_set_s -= 1;
             }
                         
         if (timer_set_h === 0 && timer_set_m === 0 && timer_set_s <= 5 && timer_set_s > 0)
@@ -283,20 +300,6 @@
             return (await timerFinished);
         }
 */
-        function runTimer() {
-//                let timerFinished = new Promise (function (resolve) {
-                clearInterval(exerciseTimer);
-                exerciseTimer = setInterval(exerciseTimerFcn, 1000);
-/*                    resolve ("Timer finished");
-            });
-            timerFinished.then((msg) => {
-                console.log(msg)
-                if (timesUp) {
-                    timesUp = false;
-                    runActivity('Take rest for ', timer_rest_h.value, timer_rest_m.value, timer_rest_s.value);
-                }
-            });
-*/            }
 
 /*            async function finishSpeakLine () {
         let speakLineFinished = new Promise (function (resolve) {
