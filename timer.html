@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test Interval Timer</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+    <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        var $select = $(".0-59");
+        for (i=0;i<=59;i++){
+            $select.append($('<option></option>').val(i).html(i))
+        }
+    });
+    $(document).ready(function(){
+        var $select = $(".0-23");
+        for (i=0;i<=23;i++){
+            $select.append($('<option></option>').val(i).html(i))
+        }
+    });
+    </script>
+</head>
+<body>
+    
+    Select Voice: <select id='voiceList'></select> <br>
+    <br>
+        Choose exercise type:
+    
+    <select name="exercise" id="exercise">
+        <option value="Fast Feet">Fast Feet</option>
+        <option value="Jump Up">Jump Up</option>
+        <option value="Squat Left and Right">Squat Left and Right</option>
+        <option value="Kick Backward">Kick Backward</option>
+        <option value="Tiger Jump">Tiger Jump</option>
+    </select>
+    <br><br>
+    Duration:
+    <select id="timer_start_h" class="0-23"></select> hr  
+    <select id="timer_start_m" class="0-59"></select> min  
+    <select id="timer_start_s" class="0-59"></select> sec
+
+    <br><br>
+    Rest:
+        <select id="timer_rest_h" class="0-23"></select> hr  
+        <select id="timer_rest_m" class="0-59"></select> min  
+        <select id="timer_rest_s" class="0-59"></select> sec
+    <br><br><br><br>
+        
+    <div id="timerBlock" style="background-color: beige;width: 100vw;padding:1%;" align=center>    
+    <br>
+        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
+        <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
+
+        <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
+    <br><br>
+    </div>
+
+    <div style="background-color:lightblue;width:100vw;border-radius:1%;padding:1%">
+        <div align=left>Time: </div>
+        <div align=left id="clockTime"></div>
+        <br> <div align=center>Stop Watch</div>
+        <p id="stopWatch" align=center>00:00:00</p>
+    
+        <div align=center>
+            <button type="button" onclick="resetStopWatch()">Reset</button>
+            <button type="button" onclick="startStopWatch()">Start</button>
+            <button type="button" onclick="stopStopWatch()">Stop</button>
+        </div>
+        <div margin-left="10px">
+            <a href="routine.html">Routine</a>
+        </div>
+    </div>
+
+    <script src="timer.js"></script>
+</body>
+</html>

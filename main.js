@@ -169,8 +169,8 @@
             timer_set_s === 0) {
                 clearTimer();
                 let temp_h = parseInt(document.getElementById("timer_rest_h").value );
-                    temp_m = parseInt(document.getElementById("timer_rest_m").value );
-                    temp_s = parseInt(document.getElementById("timer_rest_s").value );
+                let temp_m = parseInt(document.getElementById("timer_rest_m").value );
+                let temp_s = parseInt(document.getElementById("timer_rest_s").value );
                 if (!restAlready && (temp_h || temp_m || temp_s)) {
                     timer_set_h = temp_h;
                     timer_set_m = temp_m;
