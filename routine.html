@@ -18,72 +18,188 @@
         <button class="routineButt" onClick="runRoutine()">2</button>
         <button class="routineButt">3</button>
 --><script>    
+const Routines = [
+        {
+            rout_name: "Head Exercise",
+            rSets: [
+                {
+                    set_name: "Bench",
+                    set_iter: 3,
+                    Exercises: [
+                        {
+                            exer_name: "Bench press",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 7,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 5
+                        },
+                        {
+                            exer_name: "Butterfly chest expand",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 6,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 4
+                        }
+                    ]
+                },
+                {
+                    set_name: "Rubber band",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Upper arm push",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 3
+                        },
+                        {
+                            exer_name: "Waist level push",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 8,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 2
+                        }
+                    ]
+                }                
+            ]
+        },
+        {
+            rout_name: "Feet Exercise",
+            rSets: [
+                {                
+                    set_name: "Footwork",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Left and right squat",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 3,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 6
+                        },
+                        {
+                            exer_name: "Back and forward squat",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 4
+                        }
+                    ]
+                },
+                {                
+                    set_name: "Jumping",
+                    set_iter: 1,
+                    Exercises: [
+                        {
+                            exer_name: "Jump up",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 10,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 15
+                        },
+                        {
+                            exer_name: "Tiger jump",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 8,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 11
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            rout_name: "Core Exercise",
+            rSets: [
+                {                
+                    set_name: "On exercise mat",
+                    set_iter: 1,
+                    Exercises: [
+                        {
+                            exer_name: "Mountain climbing",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 5,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 7
+                        },
+                        {
+                            exer_name: "Twist left and right",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 3,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 5
+                        },
+                        {
+                            exer_name: "Draw circle with legs",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 3
+                        }
+                    ]
+                },
+                {
+                    set_name: "Using Equipment",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Rolling wheel",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 7,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 8
+                        }
+                    ]
+                } 
+            ]
+        }
+    ]
 
     $(document).ready(function(){
-        const routine = [
-            {
-                exer: "Fast Feet",
-                dur_h: 0,
-                dur_m: 0,
-                dur_s: 9,
-                res_h: 0,
-                res_m: 0,
-                res_s: 12,
-                exec_cnt: 1
-            },
-            {
-                exer: "Jump Up",
-                dur_h: 0,
-                dur_m: 0,
-                dur_s: 10,
-                res_h: 0,
-                res_m: 0,
-                res_s: 5,
-                exec_cnt: 1
-            },
-            {
-                exer: "Squat Left and Right",
-                dur_h: 0,
-                dur_m: 0,
-                dur_s: 8,
-                res_h: 0,
-                res_m: 0,
-                res_s: 3,
-                exec_cnt: 1
-            },
-            {
-                exer: "Kick Backward",
-                dur_h: 0,
-                dur_m: 0,
-                dur_s: 11,
-                res_h: 0,
-                res_m: 0,
-                res_s: 6,
-                exec_cnt: 2
-            },
-            {
-                exer: "Tiger Jump",
-                dur_h: 0,
-                dur_m: 0,
-                dur_s: 10,
-                res_h: 0,
-                res_m: 0,
-                res_s: 7,
-                exec_cnt: 1
-            }
-        ]
 
-        for (i=0;i<routine.length;i++){
-            let params = 'th=' + routine[i].dur_h + 
-                        '&tm=' + routine[i].dur_m +
-                        '&ts=' + routine[i].dur_s +
-                        '&rh=' + routine[i].res_h +
-                        '&rm=' + routine[i].res_m +
-                        '&rs=' + routine[i].res_s +
-                        '&exer=' + routine[i].exer +
-                        '&cnt=' + routine[i].exec_cnt;
+        
+
+        for (i=0;i<Routines.length;i++){
+            sessionStorage.setItem("Routine", JSON.stringify(Routines[i]));
             let butn = '<button class="routineButt" onClick="location.href=\'timer.html?' 
-                        + params +'\'">' + routine[i].exer
+                        + 'Routine' +'\'">' + Routines[i].rout_name
                         + '</button>';
 
             document.getElementById('routineContainer').innerHTML += butn;

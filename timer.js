@@ -1,23 +1,99 @@
 var voiceList       = document.querySelector('#voiceList');
 var btnGO           = document.querySelector('#btnGO');
-
+/*
 var qs = (new URL(document.location)).searchParams;
-var timer_start_h   = parseInt(qs.get('th'));
-var timer_start_m   = parseInt(qs.get('tm'));
-var timer_start_s   = parseInt(qs.get('ts'));
+var timer_exer_h   = parseInt(qs.get('th'));
+var timer_exer_m   = parseInt(qs.get('tm'));
+var timer_exer_s   = parseInt(qs.get('ts'));
 var timer_rest_h    = parseInt(qs.get('rh'));
 var timer_rest_m    = parseInt(qs.get('rm'));
 var timer_rest_s    = parseInt(qs.get('rs'));
-var exercise        = qs.get('exer');
-var exer_cnt        = parseInt(qs.get('cnt'));
+var exer_name        = qs.get('exer');
+var exer_iter_remain   = parseInt(qs.get('exer_iter'));
+*/
+/*
+var Routine = { 
+    rout_name: "Hand Exercises",
+    rSets: [
+        {
+            set_name: "Bench",
+            set_iter: 1,
+            Exercises: [
+                {
+                    exer_name: "Bench press",
+                    exer_iter: 1,
+                    timer_exer_h: 0,
+                    timer_exer_m: 0,
+                    timer_exer_s: 3,
+                    timer_rest_h: 0,
+                    timer_rest_m: 0,
+                    timer_rest_s: 2
+                },
+                {
+                    exer_name: "Butterfly chest expand",
+                    exer_iter: 1,
+                    timer_exer_h: 0,
+                    timer_exer_m: 0,
+                    timer_exer_s: 4,
+                    timer_rest_h: 0,
+                    timer_rest_m: 0,
+                    timer_rest_s: 0
+                }
+            ]
+        },
+        {
+            set_name: "Rubber band",
+            set_iter: 1,
+            Exercises: [
+                {
+                    exer_name: "Upper arm push",
+                    exer_iter: 1,
+                    timer_exer_h: 0,
+                    timer_exer_m: 0,
+                    timer_exer_s: 3,
+                    timer_rest_h: 0,
+                    timer_rest_m: 0,
+                    timer_rest_s: 1
+                },
+                {
+                    exer_name: "Waist level push",
+                    exer_iter: 2,
+                    timer_exer_h: 0,
+                    timer_exer_m: 0,
+                    timer_exer_s: 2,
+                    timer_rest_h: 0,
+                    timer_rest_m: 0,
+                    timer_rest_s: 2
+                }
+            ]
+        }                
+    ]
+}
+*/
+
+var Routine = JSON.parse(sessionStorage.getItem("Routine"));
+var Sets = Routine.rSets;
+
+var timer_exer_h, timer_exer_m, timer_exer_s;
+var timer_rest_h, timer_rest_m, timer_rest_s;
+var exer_name, exer_iter_remain;
+//exer_name           = Sets[set_idx].Exercises[exer_idx].exer_name;
+//exer_iter_remain    = Sets[set_idx].Exercises[exer_idx].exer_iter;
+
+var exer_idx            = 0;
+var set_idx             = 0;
+var set_remain          = Sets.length;
+var set_name            = Sets[set_idx].set_name;
+var set_iter_remain     = Sets[set_idx].set_iter;
+var exer_remain         = Sets[set_idx].Exercises.length;
 
 var synth = window.speechSynthesis;
 var voices = [];
 var restAlready = false;
 
-var timer_set_h = 0;
-var timer_set_m = 0;
-var timer_set_s = 0;
+var timer_run_h = 0;
+var timer_run_m = 0;
+var timer_run_s = 0;
 var paused = false;
 var exerciseTimer;
 var stopWatch_hh = 0;
@@ -26,33 +102,29 @@ var stopWatch_ss = 0;
 var stopWatchStartTime;
 var stopWatch;
 
+prepareNewExercise();
+
 PopulateVoices();
 if(speechSynthesis !== undefined){
     speechSynthesis.onvoiceschanged = PopulateVoices;
 }
 
-
 btnGO.addEventListener('click', () => {
-    timer_set_h = timer_start_h;
-    timer_set_m = timer_start_m;
-    timer_set_s = timer_start_s;
-    runActivity(exercise + ' for ', timer_start_h, timer_start_m, timer_start_s);
+    timer_run_h = timer_exer_h;
+    timer_run_m = timer_exer_m;
+    timer_run_s = timer_exer_s;
+    runActivity(exer_name + ' for ', timer_exer_h, timer_exer_m, timer_exer_s);
 });
-
-restAlready = false;
 
 function runActivity(msg, hh, mm, ss) {
     let lnTime = '';
     let toSpk;
+    clearTimer();               // to pause timer on screen
 
     lnTime = formatSpeakTime (lnTime, hh, mm, ss);
     if (lnTime != '') {
-        toSpk = speakLine(msg + lnTime);
-        clearTimer();               // to pause timer on screen
-        toSpk.onend = function(event) {
-            runTimer();
-        }
-    }             
+        speakLine(msg + lnTime, runTimer);
+        }             
 }
 
 function formatSpeakTime (lnTime, hh, mm, ss) {
@@ -73,7 +145,7 @@ function formatSpeakTime (lnTime, hh, mm, ss) {
     return (lnTime);
 }
 
-function speakLine(line) {
+function speakLine(line, callback) {
     var toSpeak = new SpeechSynthesisUtterance(line);
     var selectedVoiceName = voiceList.selectedOptions[0].getAttribute('data-name');
     voices.forEach((voice)=>{
@@ -82,7 +154,13 @@ function speakLine(line) {
         }
     });
     synth.speak(toSpeak);
-    return (toSpeak);
+    toSpeak.onend = function(event) {
+        callback();
+    }
+}
+
+function dummy () {
+    return 1;
 }
 
 function PopulateVoices(){
@@ -100,7 +178,6 @@ function PopulateVoices(){
 }
 
 //===============================================================
-
 
 var clock     = setInterval(clockFcn, 1000);
 
@@ -169,59 +246,118 @@ function runTimer() {
 }
 
 function exerciseTimerFcn() {
-if (timer_set_h === 0 &&
-    timer_set_m === 0 &&
-    timer_set_s === 0) {
+    if (timer_run_h != 0 ||
+        timer_run_m != 0 ||
+        timer_run_s != 0) 
+            minusOneSecond_fromTimerRun();
+    else { // countdown timer hit zero, need next action
         clearTimer();
         let temp_h = timer_rest_h;
         let temp_m = timer_rest_m;
         let temp_s = timer_rest_s;
-        if (!restAlready && (temp_h || temp_m || temp_s)) {
-            timer_set_h = temp_h;
-            timer_set_m = temp_m;
-            timer_set_s = temp_s;
+        if (!restAlready && (temp_h || temp_m || temp_s)) { // take rest
+            timer_run_h = temp_h;
+            timer_run_m = temp_m;
+            timer_run_s = temp_s;
             runActivity('Take rest for ', timer_rest_h, timer_rest_m, timer_rest_s);
             restAlready = true;
             document.getElementById("timerBlock").style.backgroundColor = "lightgreen";
-            return;
-        } else {
-            exer_cnt -= 1;
-            if (exer_cnt <= 0) {
-                speakLine (exercise + ' finished');
-                document.getElementById("timerBlock").style.backgroundColor = "beige";
+        } 
+        else { // one exercise including rest time is complete
+            exer_iter_remain -= 1;
+            if (exer_iter_remain > 0) { // do next exercise iteration
+                resetRunningTimer();
+                startExercise();
             }
             else {
-                restAlready = false;
-                document.getElementById('btnGO').click();
+                exer_remain--;
+                if (exer_remain > 0) { // do next exercise
+                    exer_idx++;
+                    prepareNewExercise();
+                    startExercise();
+                }
+                else { 
+                    set_iter_remain--;
+                    if (set_iter_remain > 0) { // do next set iteration
+                        exer_remain = Sets[set_idx].Exercises.length;
+                        exer_idx = 0;
+                        prepareNewExercise();
+                        speakLine('Repeat ' + set_name, startExercise);
+                    }
+                    else { 
+                        set_remain--;
+                        console.log('set remain:' +  set_remain)
+                        if (set_remain > 0) { // do next set
+                            set_idx ++;
+                            set_name        = Sets[set_idx].set_name;
+                            set_iter_remain = Sets[set_idx].set_iter;
+                            exer_remain     = Sets[set_idx].Exercises.length;
+                            exer_idx = 0;
+                            prepareNewExercise();
+                            speakLine('Next is ' + set_name, startExercise);
+                        }
+                        else {
+                            console.log('finished...')
+                            finishRoutine ();
+                        }
+                    }
+                }
             }
         }
-}
-else minusOneSecond();
+        return;
+    }
                 
-if (timer_set_h === 0 && timer_set_m === 0 && timer_set_s <= 5 && timer_set_s > 0)
-    speakLine (timer_set_s);
+    if (timer_run_h === 0 && timer_run_m === 0 && timer_run_s <= 5 && timer_run_s > 0)
+        speakLine (timer_run_s, dummy);
 
-document.getElementById("timer").innerHTML= 
-        ("0" + timer_set_h).substr(-2) + ":" +
-        ("0" + timer_set_m).substr(-2) + ":" +
-        ("0" + timer_set_s).substr(-2);
+    document.getElementById("timer").innerHTML= 
+            ("0" + timer_run_h).substr(-2) + ":" +
+            ("0" + timer_run_m).substr(-2) + ":" +
+            ("0" + timer_run_s).substr(-2);
 }
 
-function minusOneSecond () {
-    if (timer_set_s === 0) {
-        timer_set_s = 59;
+function resetRunningTimer () {
+    timer_run_h = Sets[set_idx].Exercises[exer_idx].timer_exer_h;
+    timer_run_m = Sets[set_idx].Exercises[exer_idx].timer_exer_m;
+    timer_run_s = Sets[set_idx].Exercises[exer_idx].timer_exer_s;
+}
+
+function prepareNewExercise () {
+    resetRunningTimer();
+    timer_rest_h        = Sets[set_idx].Exercises[exer_idx].timer_rest_h;
+    timer_rest_m        = Sets[set_idx].Exercises[exer_idx].timer_rest_m;
+    timer_rest_s        = Sets[set_idx].Exercises[exer_idx].timer_rest_s;
+    timer_exer_h        = Sets[set_idx].Exercises[exer_idx].timer_exer_h;
+    timer_exer_m        = Sets[set_idx].Exercises[exer_idx].timer_exer_m;
+    timer_exer_s        = Sets[set_idx].Exercises[exer_idx].timer_exer_s;
+    exer_iter_remain    = Sets[set_idx].Exercises[exer_idx].exer_iter;
+    exer_name           = Sets[set_idx].Exercises[exer_idx].exer_name;
+}
+
+function startExercise () {
+    restAlready = false;
+    document.getElementById('btnGO').click();
+}
+
+function finishRoutine () {
+    speakLine (Routine.rout_name + ' finished', dummy);
+    document.getElementById("timerBlock").style.backgroundColor = "beige";
+}
+function minusOneSecond_fromTimerRun () {
+    if (timer_run_s === 0) {
+        timer_run_s = 59;
         
-            if (timer_set_m === 0) {
-            timer_set_m = 59;
-            timer_set_h -= 1;
+            if (timer_run_m === 0) {
+            timer_run_m = 59;
+            timer_run_h -= 1;
         }
         else {
-            timer_set_m -= 1;
+            timer_run_m -= 1;
         }
     }
     else
     {
-        timer_set_s -= 1;
+        timer_run_s -= 1;
     }
 }
 
