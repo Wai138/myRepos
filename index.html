@@ -1,80 +1,210 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Test Interval Timer</title>
-
+    <title>Routines</title>
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-    $(document).ready(function(){
-        var $select = $(".0-59");
-        for (i=0;i<=59;i++){
-            $select.append($('<option></option>').val(i).html(i))
+    <link rel="stylesheet" href="routine.css">
+</head>
+<body>
+    <div id="routineContainer"></div>
+
+    <div><a href="index.html">Back</a></div>
+</body>
+<!--        <button class="routineButt" onClick="location.href='timer.html?th=0&tm=0&ts=7&rh=0&rm=0&rs=12&exer=Jumping'">1</button>
+        <button class="routineButt" onClick="runRoutine()">2</button>
+        <button class="routineButt">3</button>
+--><script>    
+const Routines = [
+        {
+            rout_name: "Head Exercise",
+            rSets: [
+                {
+                    set_name: "Bench",
+                    set_iter: 3,
+                    Exercises: [
+                        {
+                            exer_name: "Bench press",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 7,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 5
+                        },
+                        {
+                            exer_name: "Butterfly chest expand",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 6,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 4
+                        }
+                    ]
+                },
+                {
+                    set_name: "Rubber band",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Upper arm push",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 3
+                        },
+                        {
+                            exer_name: "Waist level push",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 8,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 2
+                        }
+                    ]
+                }                
+            ]
+        },
+        {
+            rout_name: "Feet Exercise",
+            rSets: [
+                {                
+                    set_name: "Footwork",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Left and right squat",
+                            exer_iter: 2,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 3,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 6
+                        },
+                        {
+                            exer_name: "Back and forward squat",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 4
+                        }
+                    ]
+                },
+                {                
+                    set_name: "Jumping",
+                    set_iter: 1,
+                    Exercises: [
+                        {
+                            exer_name: "Jump up",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 10,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 15
+                        },
+                        {
+                            exer_name: "Tiger jump",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 8,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 11
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            rout_name: "Core Exercise",
+            rSets: [
+                {                
+                    set_name: "On exercise mat",
+                    set_iter: 1,
+                    Exercises: [
+                        {
+                            exer_name: "Mountain climbing",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 5,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 7
+                        },
+                        {
+                            exer_name: "Twist left and right",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 3,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 5
+                        },
+                        {
+                            exer_name: "Draw circle with legs",
+                            exer_iter: 1,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 4,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 3
+                        }
+                    ]
+                },
+                {
+                    set_name: "Using Equipment",
+                    set_iter: 2,
+                    Exercises: [
+                        {
+                            exer_name: "Rolling wheel",
+                            exer_iter: 3,
+                            timer_exer_h: 0,
+                            timer_exer_m: 0,
+                            timer_exer_s: 7,
+                            timer_rest_h: 0,
+                            timer_rest_m: 0,
+                            timer_rest_s: 8
+                        }
+                    ]
+                } 
+            ]
         }
-    });
+    ]
+
     $(document).ready(function(){
-        var $select = $(".0-23");
-        for (i=0;i<=23;i++){
-            $select.append($('<option></option>').val(i).html(i))
+
+        
+
+        for (i=0;i<Routines.length;i++){
+            sessionStorage.setItem("Routine", JSON.stringify(Routines[i]));
+            let butn = '<button class="routineButt" onClick="location.href=\'timer.html?' 
+                        + 'Routine' +'\'">' + Routines[i].rout_name
+                        + '</button>';
+
+            document.getElementById('routineContainer').innerHTML += butn;
         }
     });
     </script>
-</head>
-<body>
-    
-    Select Voice: <select id='voiceList'></select> <br>
-    <br>
-        Choose exercise type:
-    
-    <select name="exercise" id="exercise">
-        <option value="Fast Feet">Fast Feet</option>
-        <option value="Jump Up">Jump Up</option>
-        <option value="Squat Left and Right">Squat Left and Right</option>
-        <option value="Kick Backward">Kick Backward</option>
-        <option value="Tiger Jump">Tiger Jump</option>
-    </select>
-    <br><br>
-    Duration:
-    <select id="timer_start_h" class="0-23"></select> hr  
-    <select id="timer_start_m" class="0-59"></select> min  
-    <select id="timer_start_s" class="0-59"></select> sec
-
-    <br><br>
-    Rest:
-        <select id="timer_rest_h" class="0-23"></select> hr  
-        <select id="timer_rest_m" class="0-59"></select> min  
-        <select id="timer_rest_s" class="0-59"></select> sec
-    <br><br><br><br>
-        
-    <div id="timerBlock" style="background-color: beige;width: 100vw;padding:1%;" align=center>    
-    <br>
-        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
-        <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
-
-        <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
-    <br><br>
-    </div>
-
-    <div style="background-color:lightblue;width:100vw;border-radius:1%;padding:1%">
-        <div align=left>Time: </div>
-        <div align=left id="clockTime"></div>
-        <br> <div align=center>Stop Watch</div>
-        <p id="stopWatch" align=center>00:00:00</p>
-    
-        <div align=center>
-            <button type="button" onclick="resetStopWatch()">Reset</button>
-            <button type="button" onclick="startStopWatch()">Start</button>
-            <button type="button" onclick="stopStopWatch()">Stop</button>
-        </div>
-        <div margin-left="10px">
-            <a href="routine.html">Routine</a>
-        </div>
-    </div>
-
-    <script src="main.js"></script>
-</body>
+<script src='routine.js'></script>
 </html>
