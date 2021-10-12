@@ -11,65 +11,7 @@ var timer_rest_s    = parseInt(qs.get('rs'));
 var exer_name        = qs.get('exer');
 var exer_iter_remain   = parseInt(qs.get('exer_iter'));
 */
-/*
-var Routine = { 
-    rout_name: "Hand Exercises",
-    rSets: [
-        {
-            set_name: "Bench",
-            set_iter: 1,
-            Exercises: [
-                {
-                    exer_name: "Bench press",
-                    exer_iter: 1,
-                    timer_exer_h: 0,
-                    timer_exer_m: 0,
-                    timer_exer_s: 3,
-                    timer_rest_h: 0,
-                    timer_rest_m: 0,
-                    timer_rest_s: 2
-                },
-                {
-                    exer_name: "Butterfly chest expand",
-                    exer_iter: 1,
-                    timer_exer_h: 0,
-                    timer_exer_m: 0,
-                    timer_exer_s: 4,
-                    timer_rest_h: 0,
-                    timer_rest_m: 0,
-                    timer_rest_s: 0
-                }
-            ]
-        },
-        {
-            set_name: "Rubber band",
-            set_iter: 1,
-            Exercises: [
-                {
-                    exer_name: "Upper arm push",
-                    exer_iter: 1,
-                    timer_exer_h: 0,
-                    timer_exer_m: 0,
-                    timer_exer_s: 3,
-                    timer_rest_h: 0,
-                    timer_rest_m: 0,
-                    timer_rest_s: 1
-                },
-                {
-                    exer_name: "Waist level push",
-                    exer_iter: 2,
-                    timer_exer_h: 0,
-                    timer_exer_m: 0,
-                    timer_exer_s: 2,
-                    timer_rest_h: 0,
-                    timer_rest_m: 0,
-                    timer_rest_s: 2
-                }
-            ]
-        }                
-    ]
-}
-*/
+
 
 var Routine = JSON.parse(sessionStorage.getItem("Routine"));
 var Sets = Routine.rSets;
@@ -102,7 +44,26 @@ var stopWatch_ss = 0;
 var stopWatchStartTime;
 var stopWatch;
 
+var rout_total_time_h = 0;
+var rout_total_time_m = 0;
+var rout_total_time_s = 0;
+var time_elapsed_h = 0;
+var time_elapsed_m = 0;
+var time_elapsed_s = 0;
+
+calculate_total_time();
+
 prepareNewExercise();
+
+document.getElementById("rout_name").innerHTML = Routine.rout_name;
+document.getElementById("exer_name").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_name;
+document.getElementById("exer_iter").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter;
+document.getElementById("exer_idx1").innerHTML = 1;
+document.getElementById("set_name").innerHTML = Sets[set_idx].set_name;
+document.getElementById("set_iter").innerHTML = Sets[set_idx].set_iter;
+document.getElementById("set_iter_curr").innerHTML = 1;
+document.getElementById("set_idx1").innerHTML = 1;
+document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
 
 PopulateVoices();
 if(speechSynthesis !== undefined){
@@ -248,8 +209,12 @@ function runTimer() {
 function exerciseTimerFcn() {
     if (timer_run_h != 0 ||
         timer_run_m != 0 ||
-        timer_run_s != 0) 
+        timer_run_s != 0) {
             minusOneSecond_fromTimerRun();
+            minusOneSecond_fromRemainingTime();
+            addOneSecond_toElapsedTime();
+        }
+            
     else { // countdown timer hit zero, need next action
         clearTimer();
         let temp_h = timer_rest_h;
@@ -264,6 +229,7 @@ function exerciseTimerFcn() {
             document.getElementById("timerBlock").style.backgroundColor = "lightgreen";
         } 
         else { // one exercise including rest time is complete
+            document.getElementById("timerBlock").style.backgroundColor = "rgb(209, 153, 255)";
             exer_iter_remain -= 1;
             if (exer_iter_remain > 0) { // do next exercise iteration
                 resetRunningTimer();
@@ -273,6 +239,9 @@ function exerciseTimerFcn() {
                 exer_remain--;
                 if (exer_remain > 0) { // do next exercise
                     exer_idx++;
+                    document.getElementById("exer_name").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_name;
+                    document.getElementById("exer_iter").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter;
+                    document.getElementById("exer_idx1").innerHTML = exer_idx + 1;
                     prepareNewExercise();
                     startExercise();
                 }
@@ -286,18 +255,22 @@ function exerciseTimerFcn() {
                     }
                     else { 
                         set_remain--;
-                        console.log('set remain:' +  set_remain)
                         if (set_remain > 0) { // do next set
                             set_idx ++;
                             set_name        = Sets[set_idx].set_name;
                             set_iter_remain = Sets[set_idx].set_iter;
                             exer_remain     = Sets[set_idx].Exercises.length;
                             exer_idx = 0;
+                            document.getElementById("set_name").innerHTML = Sets[set_idx].set_name;
+                            document.getElementById("set_iter").innerHTML = Sets[set_idx].set_iter;
+                            document.getElementById("set_iter_curr").innerHTML = Sets[set_idx].set_iter
+                                                                                - set_iter_remain + 1;
+                            document.getElementById("set_idx1").innerHTML = set_idx + 1;
+                            document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
                             prepareNewExercise();
                             speakLine('Next is ' + set_name, startExercise);
                         }
                         else {
-                            console.log('finished...')
                             finishRoutine ();
                         }
                     }
@@ -341,28 +314,76 @@ function startExercise () {
 
 function finishRoutine () {
     speakLine (Routine.rout_name + ' finished', dummy);
-    document.getElementById("timerBlock").style.backgroundColor = "beige";
 }
+function minusOneSecond_fromRemainingTime () {
+    if (rout_total_time_s === 0) {
+        rout_total_time_s = 59;
+        
+        if (rout_total_time_m === 0) {
+        rout_total_time_m = 59;
+        rout_total_time_h -= 1;
+        } else rout_total_time_m -= 1;   
+    }
+    else rout_total_time_s -= 1;
+    document.getElementById("time_remaining").innerHTML = rout_total_time_h + ':' 
+                                                        + rout_total_time_m + ':' + rout_total_time_s;
+}
+
 function minusOneSecond_fromTimerRun () {
     if (timer_run_s === 0) {
         timer_run_s = 59;
         
-            if (timer_run_m === 0) {
-            timer_run_m = 59;
-            timer_run_h -= 1;
-        }
-        else {
-            timer_run_m -= 1;
-        }
+        if (timer_run_m === 0) {
+        timer_run_m = 59;
+        timer_run_h -= 1;
+        } else timer_run_m -= 1;   
     }
-    else
-    {
-        timer_run_s -= 1;
-    }
+    else timer_run_s -= 1;
 }
 
 function clearTimer() {
     clearInterval(exerciseTimer);
 //    document.getElementById("GO").disabled = false;
 //    document.getElementById("show").click();
+}
+
+function calculate_total_time () {
+    let temp_h, temp_m, temp_s;
+    for (let i=0; i< Sets.length; i++) {
+        temp_h = temp_m = temp_s = 0;
+        for (let j=0; j<Sets[i].Exercises.length; j++) {
+            temp_h += (Sets[i].Exercises[j].timer_exer_h + Sets[i].Exercises[j].timer_rest_h) 
+                            * Sets[i].Exercises[j].exer_iter;
+            temp_m += (Sets[i].Exercises[j].timer_exer_m + Sets[i].Exercises[j].timer_rest_m) 
+                            * Sets[i].Exercises[j].exer_iter;
+            temp_s += (Sets[i].Exercises[j].timer_exer_s + Sets[i].Exercises[j].timer_rest_s) 
+                            * Sets[i].Exercises[j].exer_iter;
+        }
+        rout_total_time_h += temp_h * Sets[i].set_iter;
+        rout_total_time_m += temp_m * Sets[i].set_iter;
+        rout_total_time_s += temp_s * Sets[i].set_iter;
+    }
+    rout_total_time_m += Math.trunc (rout_total_time_s / 60);
+    rout_total_time_s = rout_total_time_s % 60;
+    rout_total_time_h += Math.trunc (rout_total_time_m / 60);
+    rout_total_time_m = rout_total_time_m % 60;
+    
+    document.getElementById("time_remaining").innerHTML = rout_total_time_h + ':' 
+                                                        + rout_total_time_m + ':' + rout_total_time_s;
+}
+
+function addOneSecond_toElapsedTime () {
+    if (time_elapsed_s < 59)
+        time_elapsed_s++
+    else {
+        time_elapsed_s = 0
+        if (time_elapsed_m < 59)
+        time_elapsed_m++
+        else {
+            time_elapsed_m = 0;
+            time_elapsed_h++;
+        }
+    }
+    document.getElementById("time_elapsed").innerHTML = time_elapsed_h + ':' 
+                                                        + time_elapsed_m + ':' + time_elapsed_s;
 }

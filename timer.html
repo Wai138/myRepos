@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="timer.css">
     <script>
     $(document).ready(function(){
         var $select = $(".0-59");
@@ -28,40 +29,66 @@
     
     Select Voice: <select id='voiceList'></select> <br>
     <br>
-        Choose exercise type:
     
-    <select name="exercise" id="exercise">
-        <option value="Fast Feet">Fast Feet</option>
-        <option value="Jump Up">Jump Up</option>
-        <option value="Squat Left and Right">Squat Left and Right</option>
-        <option value="Kick Backward">Kick Backward</option>
-        <option value="Tiger Jump">Tiger Jump</option>
-    </select>
-    <br><br>
-    Duration:
-    <select id="timer_start_h" class="0-23"></select> hr  
-    <select id="timer_start_m" class="0-59"></select> min  
-    <select id="timer_start_s" class="0-59"></select> sec
+    <div align=center id="clockTime" style="background-color: white;color: black;width: 100vw;"></div>        
+    <div id="timerBlock" class="blueColor" style="background-color: rgb(209, 153, 255);width: 100vw;">    
+        <br>
+        <table style="width:100vw;">
+            <tr>
+                <td style="text-align:left;width:33.3333%;"><a href="routine.html">Back</a></td>
+                <td style="text-align:center;width:33.3333%;" id="rout_name"></td>
+                <td style="text-align:right;width:33.3333%;"></td>
+            </tr>
+            <tr>
+                <td style="text-align:left;width:33.3333%;">
+                    <span id="exer_name"></span>: 
+                    <span id="exer_idx1"></span>/
+                    <span id="exer_iter"></span></td>
+                <td style="text-align:center;width:33.3333%;"></td>
+                <td style="text-align:right;width:33.3333%;">
+                    <span id="set_name"></span>:
+                    <span id="set_iter_curr"></span>/
+                    <span id="set_iter"></span>&nbsp;&nbsp;</td>
+            </tr>
+        </table>
 
-    <br><br>
-    Rest:
-        <select id="timer_rest_h" class="0-23"></select> hr  
-        <select id="timer_rest_m" class="0-59"></select> min  
-        <select id="timer_rest_s" class="0-59"></select> sec
-    <br><br><br><br>
-        
-    <div id="timerBlock" style="background-color: beige;width: 100vw;padding:1%;" align=center>    
-    <br>
-        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button><br><br>
-        <h1><button id="timer" style="background-color:yellow;padding: 1%;border-radius:10%;font-size:larger";>00:00:00</button></h1>
+        <h1><div id="timer" style="text-align:center;font-size:larger">00:00:00</div></h1>
+        <br><br>
+        <table style="width:100vw;">
+            <tr>
+                <td style="text-align:left;width:33.3333%;">Remaining:</td>
+                <td style="text-align:center;width:33.3333%;">Interval</td>
+                <td style="text-align:right;width:33.3333%;">Elapsed</td>
+            </tr>
+            <tr>
+                <td style="text-align:left;width:33.3333%;" id="time_remaining"></td>
+                <td style="text-align:center;width:33.3333%;">
+                    <span id="set_idx1"></span>/
+                    <span id="num_of_exer"></span>
+                </td>
+                <td style="text-align:right;width:33.3333%;" id="time_elapsed"></td>
+            </tr>
+        </table>
 
+        </div>   
+        <br>
+    
+        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button>
         <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
     <br><br>
     </div>
-
+    <div>
+        <table style="width:100vw;background-color: black;color: white;">
+            <tr>
+                <td style="text-align:left;width:33.3333%;" id="set_name"></td>
+                <td style="text-align:center;width:33.3333%;"></td>
+                <td style="text-align:right;width:33.3333%;" id="set_iter_curr"></td>
+            </tr>
+        </table>
+    </div>
     <div style="background-color:lightblue;width:100vw;border-radius:1%;padding:1%">
         <div align=left>Time: </div>
-        <div align=left id="clockTime"></div>
+
         <br> <div align=center>Stop Watch</div>
         <p id="stopWatch" align=center>00:00:00</p>
     
@@ -70,9 +97,7 @@
             <button type="button" onclick="startStopWatch()">Start</button>
             <button type="button" onclick="stopStopWatch()">Stop</button>
         </div>
-        <div margin-left="10px">
-            <a href="routine.html">Routine</a>
-        </div>
+
     </div>
 
     <script src="timer.js"></script>
