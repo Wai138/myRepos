@@ -1,42 +1,27 @@
 var voiceList       = document.querySelector('#voiceList');
 var btnGO           = document.querySelector('#btnGO');
-/*
+
 var qs = (new URL(document.location)).searchParams;
-var timer_exer_h   = parseInt(qs.get('th'));
-var timer_exer_m   = parseInt(qs.get('tm'));
-var timer_exer_s   = parseInt(qs.get('ts'));
-var timer_rest_h    = parseInt(qs.get('rh'));
-var timer_rest_m    = parseInt(qs.get('rm'));
-var timer_rest_s    = parseInt(qs.get('rs'));
-var exer_name        = qs.get('exer');
-var exer_iter_remain   = parseInt(qs.get('exer_iter'));
-*/
+let selectedRoutine = 'Routine' + qs.get('selectedRoutineNo')
 
-
-var Routine = JSON.parse(sessionStorage.getItem("Routine"));
+var Routine = JSON.parse(sessionStorage.getItem(selectedRoutine));
 var Sets = Routine.rSets;
 
 var timer_exer_h, timer_exer_m, timer_exer_s;
 var timer_rest_h, timer_rest_m, timer_rest_s;
 var exer_name, exer_iter_remain;
-//exer_name           = Sets[set_idx].Exercises[exer_idx].exer_name;
-//exer_iter_remain    = Sets[set_idx].Exercises[exer_idx].exer_iter;
 
-var exer_idx            = 0;
-var set_idx             = 0;
-var set_remain          = Sets.length;
-var set_name            = Sets[set_idx].set_name;
-var set_iter_remain     = Sets[set_idx].set_iter;
-var exer_remain         = Sets[set_idx].Exercises.length;
+var exer_idx, set_idx;
+var set_remain, exer_remain, set_iter_remain, set_name;
 
 var synth = window.speechSynthesis;
 var voices = [];
-var restAlready = false;
+var restAlready;
 
-var timer_run_h = 0;
-var timer_run_m = 0;
-var timer_run_s = 0;
-var paused = false;
+var timer_run_h;
+var timer_run_m;
+var timer_run_s;
+var paused;
 var exerciseTimer;
 var stopWatch_hh = 0;
 var stopWatch_mm = 0;
@@ -44,37 +29,55 @@ var stopWatch_ss = 0;
 var stopWatchStartTime;
 var stopWatch;
 
-var rout_total_time_h = 0;
-var rout_total_time_m = 0;
-var rout_total_time_s = 0;
-var time_elapsed_h = 0;
-var time_elapsed_m = 0;
-var time_elapsed_s = 0;
+var rout_total_time_h;
+var rout_total_time_m;
+var rout_total_time_s;
+var time_elapsed_h;
+var time_elapsed_m;
+var time_elapsed_s;
 
-calculate_total_time();
-
-prepareNewExercise();
-
-document.getElementById("rout_name").innerHTML = Routine.rout_name;
-document.getElementById("exer_name").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_name;
-document.getElementById("exer_iter").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter;
-document.getElementById("exer_idx1").innerHTML = 1;
-document.getElementById("set_name").innerHTML = Sets[set_idx].set_name;
-document.getElementById("set_iter").innerHTML = Sets[set_idx].set_iter;
-document.getElementById("set_iter_curr").innerHTML = 1;
-document.getElementById("set_idx1").innerHTML = 1;
-document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
+init ();
 
 PopulateVoices();
 if(speechSynthesis !== undefined){
     speechSynthesis.onvoiceschanged = PopulateVoices;
 }
 
-btnGO.addEventListener('click', () => {
+function init () {
+
+    exer_idx = set_idx  = 0;
+    set_remain          = Sets.length;
+    set_name            = Sets[set_idx].set_name;
+    set_iter_remain     = Sets[set_idx].set_iter;
+    exer_remain         = Sets[set_idx].Exercises.length;
+
+    paused      = false;
+    restAlready = false;
+        
+    rout_total_time_h   = rout_total_time_m = rout_total_time_s = 0;
+    time_elapsed_h      = time_elapsed_m    = time_elapsed_s    = 0;
+
+    calculate_total_time();
+    displayRemainingAndElapsedTime();
+
+    prepareNewExercise();
+/*
     timer_run_h = timer_exer_h;
     timer_run_m = timer_exer_m;
     timer_run_s = timer_exer_s;
-    runActivity(exer_name + ' for ', timer_exer_h, timer_exer_m, timer_exer_s);
+*/
+    document.getElementById("rout_name").innerHTML  = Routine.rout_name;
+    document.getElementById("num_of_set").innerHTML = Sets.length;
+
+    document.getElementById("exer_idx1").innerHTML  = 1;
+    document.getElementById("set_idx1").innerHTML   = 1;
+
+    document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
+}
+
+btnGO.addEventListener('click', () => {
+    init ();
+    startExercise();
 });
 
 function runActivity(msg, hh, mm, ss) {
@@ -185,9 +188,9 @@ function clockFcn() {
     let clock_date = new Date();
 
     document.getElementById("clockTime").innerHTML=
-    ("0" + clock_date.getHours()).substr(-2) + ":" +
-    ("0" + clock_date.getMinutes()).substr(-2) + ":" +
-    ("0" + clock_date.getSeconds()).substr(-2);
+                        ("0" + clock_date.getHours()).substr(-2) + ":" +
+                        ("0" + clock_date.getMinutes()).substr(-2) + ":" +
+                        ("0" + clock_date.getSeconds()).substr(-2);
 }
 
 function pauseResumeTimer() {
@@ -213,25 +216,24 @@ function exerciseTimerFcn() {
             minusOneSecond_fromTimerRun();
             minusOneSecond_fromRemainingTime();
             addOneSecond_toElapsedTime();
+            displayRemainingAndElapsedTime();
         }
             
     else { // countdown timer hit zero, need next action
         clearTimer();
-        let temp_h = timer_rest_h;
-        let temp_m = timer_rest_m;
-        let temp_s = timer_rest_s;
-        if (!restAlready && (temp_h || temp_m || temp_s)) { // take rest
-            timer_run_h = temp_h;
-            timer_run_m = temp_m;
-            timer_run_s = temp_s;
+        if (!restAlready && (timer_rest_h || timer_rest_m || timer_rest_s)) { // take rest
+            timer_run_h = timer_rest_h;
+            timer_run_m = timer_rest_m;
+            timer_run_s = timer_rest_s;
             runActivity('Take rest for ', timer_rest_h, timer_rest_m, timer_rest_s);
             restAlready = true;
             document.getElementById("timerBlock").style.backgroundColor = "lightgreen";
         } 
         else { // one exercise including rest time is complete
-            document.getElementById("timerBlock").style.backgroundColor = "rgb(209, 153, 255)";
             exer_iter_remain -= 1;
             if (exer_iter_remain > 0) { // do next exercise iteration
+                refreshTimerSection ();
+
                 resetRunningTimer();
                 startExercise();
             }
@@ -239,9 +241,6 @@ function exerciseTimerFcn() {
                 exer_remain--;
                 if (exer_remain > 0) { // do next exercise
                     exer_idx++;
-                    document.getElementById("exer_name").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_name;
-                    document.getElementById("exer_iter").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter;
-                    document.getElementById("exer_idx1").innerHTML = exer_idx + 1;
                     prepareNewExercise();
                     startExercise();
                 }
@@ -259,14 +258,9 @@ function exerciseTimerFcn() {
                             set_idx ++;
                             set_name        = Sets[set_idx].set_name;
                             set_iter_remain = Sets[set_idx].set_iter;
+
                             exer_remain     = Sets[set_idx].Exercises.length;
                             exer_idx = 0;
-                            document.getElementById("set_name").innerHTML = Sets[set_idx].set_name;
-                            document.getElementById("set_iter").innerHTML = Sets[set_idx].set_iter;
-                            document.getElementById("set_iter_curr").innerHTML = Sets[set_idx].set_iter
-                                                                                - set_iter_remain + 1;
-                            document.getElementById("set_idx1").innerHTML = set_idx + 1;
-                            document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
                             prepareNewExercise();
                             speakLine('Next is ' + set_name, startExercise);
                         }
@@ -289,27 +283,58 @@ function exerciseTimerFcn() {
             ("0" + timer_run_s).substr(-2);
 }
 
+function prepareNewExercise () {
+    resetRunningTimer();
+    updateTimerInfo();
+
+    exer_iter_remain    = Sets[set_idx].Exercises[exer_idx].exer_iter;
+    exer_name           = Sets[set_idx].Exercises[exer_idx].exer_name;
+
+    refreshTimerSection();
+}
+
 function resetRunningTimer () {
     timer_run_h = Sets[set_idx].Exercises[exer_idx].timer_exer_h;
     timer_run_m = Sets[set_idx].Exercises[exer_idx].timer_exer_m;
     timer_run_s = Sets[set_idx].Exercises[exer_idx].timer_exer_s;
 }
 
-function prepareNewExercise () {
-    resetRunningTimer();
+function updateTimerInfo () {
     timer_rest_h        = Sets[set_idx].Exercises[exer_idx].timer_rest_h;
     timer_rest_m        = Sets[set_idx].Exercises[exer_idx].timer_rest_m;
     timer_rest_s        = Sets[set_idx].Exercises[exer_idx].timer_rest_s;
     timer_exer_h        = Sets[set_idx].Exercises[exer_idx].timer_exer_h;
     timer_exer_m        = Sets[set_idx].Exercises[exer_idx].timer_exer_m;
     timer_exer_s        = Sets[set_idx].Exercises[exer_idx].timer_exer_s;
-    exer_iter_remain    = Sets[set_idx].Exercises[exer_idx].exer_iter;
-    exer_name           = Sets[set_idx].Exercises[exer_idx].exer_name;
+}
+
+function refreshTimerSection () {
+    document.getElementById("set_name").innerHTML       = Sets[set_idx].set_name;
+    document.getElementById("set_iter").innerHTML       = Sets[set_idx].set_iter;
+    document.getElementById("set_iter_curr").innerHTML  = Sets[set_idx].set_iter
+                                                            - set_iter_remain + 1;
+
+    document.getElementById("exer_idx1").innerHTML      = exer_idx + 1;
+    document.getElementById("exer_name").innerHTML      = Sets[set_idx].Exercises[exer_idx].exer_name;
+    document.getElementById("exer_iter").innerHTML      = Sets[set_idx].Exercises[exer_idx].exer_iter;
+    document.getElementById("exer_iter_curr").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter
+                                                            - exer_iter_remain + 1;
+
+    document.getElementById("set_idx1").innerHTML = set_idx + 1;
+    document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
 }
 
 function startExercise () {
     restAlready = false;
-    document.getElementById('btnGO').click();
+/*    timer_run_h = timer_exer_h;
+    timer_run_m = timer_exer_m;
+    timer_run_s = timer_exer_s;
+*/
+    document.getElementById("timerBlock").style.backgroundColor = "rgb(209, 153, 255)";
+
+    runActivity(exer_name + ' for ', timer_exer_h, timer_exer_m, timer_exer_s);
+
+//    document.getElementById('btnGO').click();
 }
 
 function finishRoutine () {
@@ -325,8 +350,6 @@ function minusOneSecond_fromRemainingTime () {
         } else rout_total_time_m -= 1;   
     }
     else rout_total_time_s -= 1;
-    document.getElementById("time_remaining").innerHTML = rout_total_time_h + ':' 
-                                                        + rout_total_time_m + ':' + rout_total_time_s;
 }
 
 function minusOneSecond_fromTimerRun () {
@@ -343,8 +366,6 @@ function minusOneSecond_fromTimerRun () {
 
 function clearTimer() {
     clearInterval(exerciseTimer);
-//    document.getElementById("GO").disabled = false;
-//    document.getElementById("show").click();
 }
 
 function calculate_total_time () {
@@ -367,9 +388,6 @@ function calculate_total_time () {
     rout_total_time_s = rout_total_time_s % 60;
     rout_total_time_h += Math.trunc (rout_total_time_m / 60);
     rout_total_time_m = rout_total_time_m % 60;
-    
-    document.getElementById("time_remaining").innerHTML = rout_total_time_h + ':' 
-                                                        + rout_total_time_m + ':' + rout_total_time_s;
 }
 
 function addOneSecond_toElapsedTime () {
@@ -384,6 +402,15 @@ function addOneSecond_toElapsedTime () {
             time_elapsed_h++;
         }
     }
-    document.getElementById("time_elapsed").innerHTML = time_elapsed_h + ':' 
-                                                        + time_elapsed_m + ':' + time_elapsed_s;
+}
+
+function displayRemainingAndElapsedTime () {
+    document.getElementById("time_remaining").innerHTML = 
+                                ("0" + rout_total_time_h).substr(-2) + ":" +
+                                ("0" + rout_total_time_m).substr(-2) + ":" +
+                                ("0" + rout_total_time_s).substr(-2);
+    document.getElementById("time_elapsed").innerHTML = 
+                                ("0" + time_elapsed_h).substr(-2) + ":" +
+                                ("0" + time_elapsed_m).substr(-2) + ":" +
+                                ("0" + time_elapsed_s).substr(-2);
 }

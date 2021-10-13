@@ -192,14 +192,11 @@ const Routines = [
         }
     ]
 
-    $(document).ready(function(){
-
-        
-
+    $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
-            sessionStorage.setItem("Routine", JSON.stringify(Routines[i]));
+            sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
             let butn = '<button class="routineButt" onClick="location.href=\'timer.html?' 
-                        + 'Routine' +'\'">' + Routines[i].rout_name
+                        + 'selectedRoutineNo=' + i +'\'">' + Routines[i].rout_name
                         + '</button>';
 
             document.getElementById('routineContainer').innerHTML += butn;
