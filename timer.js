@@ -37,6 +37,8 @@ var time_elapsed_m;
 var time_elapsed_s;
 
 init ();
+loadExerciseContainer();
+hightlightExercise();
 
 PopulateVoices();
 if(speechSynthesis !== undefined){
@@ -67,10 +69,10 @@ function init () {
     timer_run_s = timer_exer_s;
 */
     document.getElementById("rout_name").innerHTML  = Routine.rout_name;
-    document.getElementById("num_of_set").innerHTML = Sets.length;
+    document.getElementsByClassName("num_of_set").innerHTML = Sets.length;
 
     document.getElementById("exer_idx1").innerHTML  = 1;
-    document.getElementById("set_idx1").innerHTML   = 1;
+    document.getElementsByClassName("set_idx1").innerHTML   = 1;
 
     document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
 }
@@ -139,6 +141,56 @@ function PopulateVoices(){
         voiceList.appendChild(listItem);
     });
     voiceList.selectedIndex = selectedIndex;
+}
+
+function scrollToNextExercise () {
+    let exerId = 'exer' + exer_idx;
+    let elm = document.getElementById(exerId);
+    elm.scrollIntoView();
+}
+function removeHighlight () {
+    let idx = exer_idx - 1;
+    let exerId = 'exer' + idx;
+    let elm = document.getElementById(exerId);
+    elm.style.backgroundColor = "white";
+}
+
+function hightlightExercise() {
+    let exerId = 'exer' + exer_idx;
+    let elm = document.getElementById(exerId);
+    elm.style.backgroundColor = "rgb(209, 153, 255)";
+}
+
+function loadExerciseContainer () {
+    document.getElementById('exerciseContainer').innerHTML = '';
+
+    for (i=0;i<Sets[set_idx].Exercises.length;i++){
+        let currExer  = Sets[set_idx].Exercises[i];
+        let duration  = ("0" + currExer.timer_exer_h).substr(-2) + ":" +
+                        ("0" + currExer.timer_exer_m).substr(-2) + ":" +
+                        ("0" + currExer.timer_exer_s).substr(-2);
+        let rest_time = ("0" + currExer.timer_rest_h).substr(-2) + ":" +
+                        ("0" + currExer.timer_rest_m).substr(-2) + ":" +
+                        ("0" + currExer.timer_rest_s).substr(-2);
+
+        let butn = `<table id="exer` + i + `" class="exerciseItem" style="width:100vw;">
+        <tr>
+            <td style="text-align:left;font-weight: bold; font-size: 1.5em">` + currExer.exer_name + `</td>
+        </tr>
+        <tr>
+            <td style="text-align:left;width:33.3333%;">Duration: 
+                <span style="font-weight: bold;">` + duration + `</span></td>
+            <td style="text-align:center;width:33.3333%;"></td>
+            <td style="text-align:left;width:33.3333%;">Rest: 
+                <span>` + rest_time + `</span></td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">Execute Count: <span>` 
+                + Sets[set_idx].Exercises[i].exer_iter + `</span></td>
+        </tr>
+    </table>`;
+        document.getElementById('exerciseContainer').innerHTML += butn;
+    }
 }
 
 //===============================================================
@@ -242,6 +294,10 @@ function exerciseTimerFcn() {
                 if (exer_remain > 0) { // do next exercise
                     exer_idx++;
                     prepareNewExercise();
+                    removeHighlight();
+                    scrollToNextExercise();
+                    hightlightExercise();
+  
                     startExercise();
                 }
                 else { 
@@ -262,6 +318,8 @@ function exerciseTimerFcn() {
                             exer_remain     = Sets[set_idx].Exercises.length;
                             exer_idx = 0;
                             prepareNewExercise();
+                            loadExerciseContainer();
+                            hightlightExercise();
                             speakLine('Next is ' + set_name, startExercise);
                         }
                         else {
@@ -309,7 +367,8 @@ function updateTimerInfo () {
 }
 
 function refreshTimerSection () {
-    document.getElementById("set_name").innerHTML       = Sets[set_idx].set_name;
+    document.getElementsByClassName("set_name")[0].innerHTML       = Sets[set_idx].set_name;
+    document.getElementsByClassName("set_name")[1].innerHTML       = Sets[set_idx].set_name;
     document.getElementById("set_iter").innerHTML       = Sets[set_idx].set_iter;
     document.getElementById("set_iter_curr").innerHTML  = Sets[set_idx].set_iter
                                                             - set_iter_remain + 1;
@@ -320,7 +379,7 @@ function refreshTimerSection () {
     document.getElementById("exer_iter_curr").innerHTML = Sets[set_idx].Exercises[exer_idx].exer_iter
                                                             - exer_iter_remain + 1;
 
-    document.getElementById("set_idx1").innerHTML = set_idx + 1;
+    document.getElementsByClassName("set_idx1").innerHTML = set_idx + 1;
     document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
 }
 

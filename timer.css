@@ -1,3 +1,16 @@
-#timerBlock {
-    
+body {
+    height: 95vh;
+    font-size: 100%;
+}
+
+.exerciseItem {
+    height: 50%;
+    width: 100%;
+}
+
+#exerciseContainer {
+    height: 20vw;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
 }

@@ -1,94 +1,10 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Routines</title>
-    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
-    <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="routine.css">
-
-</head>
-<body>
-<!-- <iframe name='iframe' id='iframe' src='Routines.json' onload='readfile()'></iframe> -->    
-    <div id="routineContainer"></div>
-
-    <div><a href="index.html">Back</a></div>
-</body>
-<!--        <button class="routineButt" onClick="location.href='timer.html?th=0&tm=0&ts=7&rh=0&rm=0&rs=12&exer=Jumping'">1</button>
-        <button class="routineButt" onClick="runRoutine()">2</button>
-        <button class="routineButt">3</button>
--->
-<script>
-/*    app.UseCors(builder => builder
-.AllowAnyOrigin()
-.AllowAnyMethod()
-.AllowAnyHeader()
-    )
-
-    const logFileText = async file => {
-    const response = await fetch(file)
-    const text = await response.text()
-    return text;
-}
-
-    const Routines = JSON.parse (logFileText('Routines.json'));
-*/
-    function readfile() {
-/*        console.log('inside readfile')
-        const file = './Routines.json';
-        const reader = new FileReader();
-        if (!file) return
-        reader.onload = (e) => {
-            // e.target points to the reader
-            const textContent = e.target.result;
-            const Routines = JSON.parse(textContent);
-            console.log(`The content of ${file.name} is ${textContent}`)
-        }
-        reader.onerror = (e) => {
-            const error = e.target.error
-            console.error(`Error occured while reading ${file.name}`, error)
-        }
-        reader.readAsText(file)
-        console.log('going out')
-        
-        var frameObj = document.getElementById('iframe');
-
-        console.log('frameObj: ' + frameObj);
-        var elmnt = iframe.contentWindow.document.getElementsByTagName("pre")[0];
-        elmnt.style.color = "yellow";        
-        console.log('contentWindow: ' + frameObj.contentWindow)
-        console.log('contentWindow document: ' + frameObj.contentWindow.document)
-        var frameContent = frameObj.contentWindow.document.text;
-        console.log (frameContent)
-        var       Routines = JSON.parse (frameContent);
-    */        }
-</script>
-
-<script> 
-   
-    $(document).ready(function() {
-        for (i=0;i<Routines.length;i++){
-            sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
-            let butn = '<button class="routineButt" onClick="location.href=\'timer.html?' 
-                        + 'selectedRoutineNo=' + i +'\'">' + Routines[i].rout_name
-                        + '</button>';
-
-            document.getElementById('routineContainer').innerHTML += butn;
-//            document.getElementsByTagName('button')[2].scrollIntoView();
-        }
-    });
-    </script>
-    <script>
-        const Routines = 
-        [
+[
         {
             "rout_name": "Hand  Exercise",
             "rSets": [
                 {
                     "set_name": "Bench",
-                    "set_iter": 1,
+                    "set_iter": 3,
                      "Exercises": [
                         {
                             "exer_name": "Bench press",
@@ -145,7 +61,7 @@
             "rSets": [
                 {                
                     "set_name": "Footwork",
-                    "set_iter": 1,
+                    "set_iter": 2,
                      "Exercises": [
                         {
                             "exer_name": "Left and right squat",
@@ -171,7 +87,7 @@
                 },
                 {                
                     "set_name": "Jumping",
-                    "set_iter": 2,
+                    "set_iter": 1,
                      "Exercises": [
                         {
                             "exer_name": "Jump up",
@@ -206,17 +122,17 @@
                      "Exercises": [
                         {
                             "exer_name": "Mountain climbing",
-                            "exer_iter": 1,
+                            "exer_iter": 3,
                             "timer_exer_h": 0,
                             "timer_exer_m": 0,
-                            "timer_exer_s": 3,
+                            "timer_exer_s": 5,
                             "timer_rest_h": 0,
                             "timer_rest_m": 0,
-                            "timer_rest_s": 2
+                            "timer_rest_s": 7
                         },
                         {
                             "exer_name": "Twist left and right",
-                            "exer_iter": 1,
+                            "exer_iter": 3,
                             "timer_exer_h": 0,
                             "timer_exer_m": 0,
                             "timer_exer_s": 3,
@@ -255,6 +171,3 @@
             ]
         }
     ]
-    </script>
-<script src='routine.js'></script>
-</html>
