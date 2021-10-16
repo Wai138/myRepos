@@ -25,7 +25,7 @@
     });
     </script>
 </head>
-<body">
+<body style="margin: 0;">
     
     Select Voice: <select id='voiceList'></select> <br>
     <br>
@@ -43,12 +43,12 @@
                 <td style="text-align:left;width:33.3333%;">
                     <span id="exer_name"></span>: 
                     <span id="exer_iter_curr"></span>/
-                    <span id="exer_iter"></span></td>
+                    <span id="exer_iter"></span>&nbsp rep</td>
                 <td style="text-align:center;width:33.3333%;"></td>
                 <td style="text-align:right;width:33.3333%;">
-                    <span class="set_name"></span>:
+                    <span class="set_name"></span>&nbsp Set:
                     <span id="set_iter_curr"></span>/
-                    <span id="set_iter"></span></td>
+                    <span id="set_iter"></span>&nbsp rep</td>
             </tr>
         </table>
 
@@ -71,11 +71,20 @@
         </table>
 
         </div>   
-        <br>
     
-        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button>
-        <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
-    <br><br>
+        <div style="background-color: lightgray;width: 100vw;">    
+
+            <table style="width:96vw;margin-right: 2vw;margin-left: 2vw;">
+                <tr>
+                    <td style="text-align:left;width:33.3333%;"></td>
+                    <td style="text-align:center;width:33.3333%;">
+                        <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button>
+                        <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
+                    </td>
+                    <td style="text-align:right;width:33.3333%;"><a href="stopWatch.html">Stop Watch</a></td>
+                </tr>
+            </table>
+    
     </div>
     <div>
         <table style="width:100vw;background-color: lightgreen;">
@@ -84,29 +93,15 @@
                 <td style="text-align:center;width:33.3333%;"></td>
                 <td style="text-align:right;width:33.3333%;">
                     <span>Execute Status:</span>
-                    <span class="set_idx1"></span>/
-                    <span class="num_of_set"></span>
+                    <span id="set_idx1"></span>/
+                    <span id="num_of_set"></span>
                 </td>
             </tr>
         </table>
     </div>
-
 <div id="exerciseContainer">
 </div>
 
-    <div style="background-color:lightblue;width:100vw;border-radius:1%;padding:1%">
-
-        <br> <div align=center>Stop Watch</div>
-        <p id="stopWatch" align=center>00:00:00</p>
-    
-        <div align=center>
-            <button type="button" onclick="resetStopWatch()">Reset</button>
-            <button type="button" onclick="startStopWatch()">Start</button>
-            <button type="button" onclick="stopStopWatch()">Stop</button>
-        </div>
-
-    </div>
-
-    <script src="timer.js"></script>
+<script src="timer.js"></script>
 </body>
 </html>

@@ -23,11 +23,6 @@ var timer_run_m;
 var timer_run_s;
 var paused;
 var exerciseTimer;
-var stopWatch_hh = 0;
-var stopWatch_mm = 0;
-var stopWatch_ss = 0;
-var stopWatchStartTime;
-var stopWatch;
 
 var rout_total_time_h;
 var rout_total_time_m;
@@ -69,10 +64,10 @@ function init () {
     timer_run_s = timer_exer_s;
 */
     document.getElementById("rout_name").innerHTML  = Routine.rout_name;
-    document.getElementsByClassName("num_of_set").innerHTML = Sets.length;
+    document.getElementById("num_of_set").innerHTML = Sets.length;
 
     document.getElementById("exer_idx1").innerHTML  = 1;
-    document.getElementsByClassName("set_idx1").innerHTML   = 1;
+    document.getElementById("set_idx1").innerHTML   = 1;
 
     document.getElementById("num_of_exer").innerHTML = Sets[set_idx].Exercises.length;
 }
@@ -197,45 +192,6 @@ function loadExerciseContainer () {
 
 var clock     = setInterval(clockFcn, 1000);
 
-startStopWatch ();
-
-function startStopWatch () {
-    stopStopWatch();
-    stopWatch = setInterval(stopWatchFcn, 1000);
-}
-
-function stopStopWatch() {
-    clearInterval(stopWatch);
-}
-
-function resetStopWatch() {
-    stopStopWatch ();
-    stopWatch_hh = 0;
-    stopWatch_mm = 0;
-    stopWatch_ss = 0;
-    displayStopWatch ();
-}
-
-function stopWatchFcn() {
-    if (stopWatch_ss < 59) stopWatch_ss += 1
-        else {
-            stopWatch_ss = 0;
-            if (stopWatch_mm < 59) stopWatch_mm += 1
-                else {
-                    stopWatch_mm = 0;
-                    stopWatch_hh += 1
-                }
-        }
-    displayStopWatch ();
-}
-
-function displayStopWatch () {
-    document.getElementById("stopWatch").innerHTML=
-        ("0" + stopWatch_hh).substr(-2) + ":" +
-        ("0" + stopWatch_mm).substr(-2) + ":" +
-        ("0" + stopWatch_ss).substr(-2);
-}
-
 function clockFcn() {
     let clock_date = new Date();
 
@@ -297,7 +253,7 @@ function exerciseTimerFcn() {
                     removeHighlight();
                     scrollToNextExercise();
                     hightlightExercise();
-  
+
                     startExercise();
                 }
                 else { 
@@ -311,7 +267,7 @@ function exerciseTimerFcn() {
                     else { 
                         set_remain--;
                         if (set_remain > 0) { // do next set
-                            set_idx ++;
+                            set_idx++;
                             set_name        = Sets[set_idx].set_name;
                             set_iter_remain = Sets[set_idx].set_iter;
 
