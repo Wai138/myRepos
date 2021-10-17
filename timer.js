@@ -34,7 +34,7 @@ var time_elapsed_s;
 init ();
 loadExerciseContainer();
 hightlightExercise();
-
+window.onscroll=stop();
 PopulateVoices();
 if(speechSynthesis !== undefined){
     speechSynthesis.onvoiceschanged = PopulateVoices;
