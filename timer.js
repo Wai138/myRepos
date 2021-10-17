@@ -170,16 +170,16 @@ function loadExerciseContainer () {
 
         let butn = `<table id="exer` + i + `" class="exerciseItem" style="width:100vw;">
         <tr style="white-space: nowrap;">
-            <td style="line-height: 0.5;text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
+            <td style="height: .3em;text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
         </tr>
-        <tr style="line-height: 0.5;">
+        <tr style="height: .4em;line-height: 0.4;">
             <td style="text-align:left;width:33.3333%;">Duration: 
-                <span style="font-weight: bold;">` + duration + `</span></td>
+                <span id="duration">` + duration + `</span></td>
             <td style="text-align:center;width:33.3333%;"></td>
             <td style="text-align:left;width:33.3333%;">Rest: 
-                <span>` + rest_time + `</span></td>
+                <span id="rest_time">` + rest_time + `</span></td>
         </tr>
-        <tr style="line-height: 0.5;">
+        <tr style="height: .5em;line-height: 0.4;">
             <td style="text-align:left;">Execute Count: <span>` 
                 + Sets[set_idx].Exercises[i].exer_iter + `</span></td>
         </tr>
@@ -291,10 +291,20 @@ function exerciseTimerFcn() {
     if (timer_run_h === 0 && timer_run_m === 0 && timer_run_s <= 5 && timer_run_s > 0)
         speakLine (timer_run_s, dummy);
 
-    document.getElementById("timer").innerHTML= 
-            ("0" + timer_run_h).substr(-2) + ":" +
-            ("0" + timer_run_m).substr(-2) + ":" +
-            ("0" + timer_run_s).substr(-2);
+    let runTimeShown = '';
+
+    if (timer_run_h > 0) {
+        runTimeShown  = timer_run_h + ":";
+        runTimeShown += ("0" + timer_run_m).substr(-2) + ":";
+        runTimeShown += ("0" + timer_run_s).substr(-2);
+    } else {
+        if (timer_run_m > 0) {
+            runTimeShown  = timer_run_m + ":";
+            runTimeShown += ("0" + timer_run_s).substr(-2);
+        } else runTimeShown = timer_run_s;
+    }
+
+    document.getElementById("timer").innerHTML= runTimeShown;
 }
 
 function prepareNewExercise () {
