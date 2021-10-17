@@ -170,16 +170,16 @@ function loadExerciseContainer () {
 
         let butn = `<table id="exer` + i + `" class="exerciseItem" style="width:100vw;">
         <tr>
-            <td style="text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
+            <td style="line-height: 0.5;text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
         </tr>
-        <tr>
+        <tr style="line-height: 0.5;">
             <td style="text-align:left;width:33.3333%;">Duration: 
                 <span style="font-weight: bold;">` + duration + `</span></td>
             <td style="text-align:center;width:33.3333%;"></td>
             <td style="text-align:left;width:33.3333%;">Rest: 
                 <span>` + rest_time + `</span></td>
         </tr>
-        <tr>
+        <tr style="line-height: 0.5;">
             <td style="text-align:left;">Execute Count: <span>` 
                 + Sets[set_idx].Exercises[i].exer_iter + `</span></td>
         </tr>
