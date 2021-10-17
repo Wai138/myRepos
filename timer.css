@@ -39,3 +39,11 @@ body {
     width: 400px;
     /* Whatever width you want */
   }
+
+  .oneThird td {
+      width: 33.3333%;
+  }
+
+  .set_header {
+      color: white;
+  }

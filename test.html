@@ -1,0 +1,43 @@
+<table style="width:100vw;background-color: black;color: white; height: 5vh;" id="S` + ss + `">
+    <tbody>
+        <tr class="oneThird set_header">
+            <td style="text-align:left;" ;>
+                <span class="` + Sets[i].set_name + `"></span>
+            </td>
+            <td style="text-align:center;">
+            </td>
+            <td style="text-align:right;">
+                <span>Execute Status:</span>
+                <span>` + i + `</span>/
+                <span>` + Sets.length + `</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table id="E` + ss + ee + 
+            `" class="exerciseItem" style="width:100vw;">
+    <tbody>
+        <tr style="white-space: nowrap;">
+            <td style="height: .3em;text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw" ;>`
+                + currExer.exer_name + `</td>
+        </tr>
+        <tr style="height: .4em;line-height: 0.4;">
+            <td style="text-align:left;width:33.3333%;">Duration:
+                <span id="duration">` + duration + `</span>
+            </td>
+            <td style="text-align:center;width:33.3333%;"></td>
+            <td style="text-align:left;width:33.3333%;">Rest:
+                <span id="rest_time">` + rest_time + `</span>
+            </td>
+        </tr>
+        <tr style="height: .5em;line-height: 0.4;">
+            <td style="text-align:left;">Execute Count: <span>`
+                    + Sets[set_idx].Exercises[i].exer_iter + `</span></td>
+        </tr>
+        <span id="E` + ss + ee + `Remain" style="display: none;">
+            ` + Rhhmmss + `</span>
+        <span id="E` + ss + ee + `Elapse" style="display: none;">
+            ` + Ehhmmss + `</span>
+    </tbody>
+</table>

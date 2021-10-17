@@ -25,7 +25,9 @@
     });
     </script>
 </head>
-<body style="margin: 0; overflow: hidden;">
+<body style="margin: 0; overflow: hidden;  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+scrollbar-width: none; /* for Firefox */
+overflow-y: scroll; ">
     
     
     <div align=center id="clockTime" style="background-color: white;color: black;width: 100vw;height: 5vh;"></div>        
@@ -102,7 +104,7 @@
                     <td style="text-align:left;width:33.3333%;"></td>
                     <td style="text-align:center;width:33.3333%;">
                         <button id='btnGO' style="background-color: rgb(209, 153, 255);font-size: medium;border-radius: 20%;">GO</button>
-                        
+                        &nbsp;&nbsp;
                         <button type="button" onclick="pauseResumeTimer()" style="background-color: lightgreen; padding:5px"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
                     </td>
                     <td style="text-align:right;width:33.3333%;"><a href="stopWatch.html">Stop Watch</a></td>
@@ -110,10 +112,11 @@
             </table>
     
     </div>
-    <divx>
+    <div>
         <table style="width:100vw;background-color: black;color: white; height: 5vh;">
-            <tr>
-                <td style="text-align:left;width:33.3333%;";color white><span class="set_name"></span></td>
+            <tr class="set_header" id="set_header">
+                <td style="text-align:left;width:33.3333%;">
+                    <span class="set_name"></span></td>
                 <td style="text-align:center;width:33.3333%;"></td>
                 <td style="text-align:right;width:33.3333%;">
                     <span>Execute Status:</span>
@@ -124,6 +127,7 @@
         </table>
     </div>
 <div id="exerciseContainer" style="height: 40vh;">
+
 </div>
 
 <script src="timer.js"></script>
