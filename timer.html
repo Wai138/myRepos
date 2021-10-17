@@ -30,44 +30,70 @@
     Select Voice: <select id='voiceList' style="height: 5vh;"></select> 
     
     <div align=center id="clockTime" style="background-color: white;color: black;width: 100vw;height: 5vh;"></div>        
-    <div id="timerBlock" class="blueColor" style="background-color: rgb(209, 153, 255);width: 100vw;height: 40vh;">    
+    <div id="timerBlock" class="blueColor" style="position: relative; background-color: rgb(209, 153, 255);width: 100vw;height: 40vh;">    
         
-        <table style="width:96vw;margin-right: 2vw;margin-left: 2vw;">
-            <tr>
-                <td style="text-align:left;width:33.3333%;"><a href="index.html">Back</a></td>
-                <td style="text-align:center;width:33.3333%;" id="rout_name"></td>
-                <td style="text-align:right;width:33.3333%;"></td>
-            </tr>
-            <tr>
-                <td style="text-align:left;width:33.3333%;">
-                    <span id="exer_name"></span>: 
-                    <span id="exer_iter_curr"></span>/
-                    <span id="exer_iter"></span>&nbsp rep</td>
-                <td style="text-align:center;width:33.3333%;"></td>
-                <td style="text-align:right;width:33.3333%;">
-                    <span class="set_name"></span>&nbsp Set:
-                    <span id="set_iter_curr"></span>/
-                    <span id="set_iter"></span>&nbsp rep</td>
-            </tr>
-        </table>
 
-        <h1><div id="timer" style="text-align:center;font-size:larger">00:00:00</div></h1>
-        
-        <table style="width:96vw;margin-right:2vw;margin-left:2vw;">
-            <tr>
-                <td style="text-align:left;width:33.3333%;">Remaining:</td>
-                <td style="text-align:center;width:33.3333%;">Interval</td>
-                <td style="text-align:right;width:33.3333%;">Elapsed</td>
-            </tr>
-            <tr>
-                <td style="text-align:left;width:33.3333%;" id="time_remaining"></td>
-                <td style="text-align:center;width:33.3333%;">
-                    <span id="exer_idx1"></span>/
-                    <span id="num_of_exer"></span>
-                </td>
-                <td style="text-align:right;width:33.3333%;" id="time_elapsed"></td>
-            </tr>
-        </table>
+
+
+            <div style="height: 20%;">
+                <table style="width:96vw;margin-right: 2vw;margin-left: 2vw;">
+                    <tr>
+                        <td style="text-align:left;width:33.3333%;"><a href="index.html">Back</a></td>
+                        <td style="text-align:center;width:33.3333%;" id="rout_name"></td>
+                        <td style="text-align:right;width:33.3333%;"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;width:33.3333%;">
+                            <span id="exer_name"></span> 
+                            <td style="text-align:center;width:33.3333%;"></td>
+                        <td style="text-align:right;width:33.3333%;">
+                            <span class="set_name"></span>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;width:33.3333%;">
+                            <span>Iteration:&nbsp;</span> 
+                            <span id="exer_iter_curr"></span>/
+                            <span id="exer_iter"></span>&nbsp rep</td>
+                        <td style="text-align:center;width:33.3333%;"></td>
+                        <td style="text-align:right;width:33.3333%;">
+                            <span>Set:&nbsp;</span>
+                            <span id="set_iter_curr"></span>/
+                            <span id="set_iter"></span>&nbsp rep</td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+            <div class="outer" style="height: 60%;">
+                <div class="middle">
+                    <div class="inner">
+                        <h1 style="vertical-align: middle;"><div id="timer" style="text-align:center; font-size:larger">00:00:00</div></h1>
+                    </div>
+                </div>
+            </div>        
+
+
+
+            <div style="height: 20%;position: absolute;bottom: 0;">
+                <table style="width:96vw;margin-right:2vw;margin-left:2vw;">
+                    <tr>
+                        <td style="text-align:left;width:33.3333%;">Remaining:</td>
+                        <td style="text-align:center;width:33.3333%;">Interval</td>
+                        <td style="text-align:right;width:33.3333%;">Elapsed</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;width:33.3333%;" id="time_remaining"></td>
+                        <td style="text-align:center;width:33.3333%;">
+                            <span id="exer_idx1"></span>/
+                            <span id="num_of_exer"></span>
+                        </td>
+                        <td style="text-align:right;width:33.3333%;" id="time_elapsed"></td>
+                    </tr>
+                </table>
+            </div>
+
+
 
         </div>   
     
@@ -78,6 +104,7 @@
                     <td style="text-align:left;width:33.3333%;"></td>
                     <td style="text-align:center;width:33.3333%;">
                         <button id='btnGO' style="background-color: lightgreen;font-size: medium;">GO</button>
+                        &nbsp;&nbsp;
                         <button type="button" onclick="pauseResumeTimer()" style="padding:5px;border-radius:20%"><i class="far fa-pause-circle"></i> / <i class="fas fa-play"></i></button>
                     </td>
                     <td style="text-align:right;width:33.3333%;"><a href="stopWatch.html">Stop Watch</a></td>
@@ -86,9 +113,9 @@
     
     </div>
     <divx>
-        <table style="width:100vw;background-color: lightgreen;height: 5vh;">
+        <table style="width:100vw;background-color: black;color: white; height: 5vh;">
             <tr>
-                <td style="text-align:left;width:33.3333%;"><span class="set_name"></span></td>
+                <td style="text-align:left;width:33.3333%;";color white><span class="set_name"></span></td>
                 <td style="text-align:center;width:33.3333%;"></td>
                 <td style="text-align:right;width:33.3333%;">
                     <span>Execute Status:</span>
