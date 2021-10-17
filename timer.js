@@ -170,7 +170,7 @@ function loadExerciseContainer () {
 
         let butn = `<table id="exer` + i + `" class="exerciseItem" style="width:100vw;">
         <tr>
-            <td style="line-height: 0.5;text-align:left;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
+            <td style="line-height: 0.5;text-align:left;white-space: nowrap;font-weight: bold; font-size: 1.3em;width: 100vw";>` + currExer.exer_name + `</td>
         </tr>
         <tr style="line-height: 0.5;">
             <td style="text-align:left;width:33.3333%;">Duration: 
