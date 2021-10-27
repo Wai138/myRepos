@@ -1,3 +1,8 @@
+#clockTime {
+    height: 5vh;
+    background-color: white;
+    color: black;
+}
 
 .container {
     height: 200px;

@@ -54,7 +54,7 @@ overflow-y: scroll; ">
 <div style="position: fixed;">
     <table><tr>
         <td class="oneThird"></td>
-        <td class="oneThird"><div align=center style="height: 5vh;background-color: white;color: black;" id="clockTime"></div></td>
+        <td class="oneThird"><div align=center id="clockTime"></div></td>
         <td class="oneThird"></td>
     </tr></table>
     <br>
@@ -75,7 +75,7 @@ overflow-y: scroll; ">
 <div style="position: fixed;">
 <table><tr>
     <td class="oneThird"></td>
-    <td class="oneThird"><div align=center style="background-color: yellow;"><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
+    <td class="oneThird"><div align=center><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
     <td class="oneThird"></td>
 </tr></table>
 </div>
@@ -100,8 +100,8 @@ overflow-y: scroll; ">
                         +           'style="display:inline-block;font-size:larger;min-width:95vw;background-color:yellow;">'
                         +                   Routines[i].rout_name + '</span>'
                         + '</span>'                        
-                        + '<span class="start" style="min-width:8vw;position:fixed;z-index:10;margin-left:-15vw">'
-                        +       '<button class="routineButt" onClick="location.href=\'timer.html?' 
+                        + '<span class="start" style="width:auto;position:fixed;z-index:10;margin-left:-15vw">'
+                        +       '<button style="width:fit-content;" class="routineButt" onClick="location.href=\'timer.html?' 
                         +           'selectedRoutineNo=' + i 
                         +           '\'">Start'
                         +       '</button>'
@@ -109,37 +109,11 @@ overflow-y: scroll; ">
                         + '<span>'
                         +   '<span style="position:relative;">'
 //                        +       '<span style="display:inline-block;min-width:5vw;"></span>'
-                        +       '<button style="z-index:99" class="DelId" onClick="deleteRout(' + i +')"'
+                        +       '<button style="width=auto;z-index:99" class="DelId" onClick="deleteRout(' + i +')"'
                         +           ' id="DelId' + i + '">DELETE</button>'; 
                         +   '</span>'
                         + '</span></div>'
-/*                        
-            let butn = '<div style="position:absolute"><tr class="routineTab" id="row' + i + '" '
-                        + 'style="height:5%;">'
-                        + '<div style="position:fixed" id="div' + i + '">'
-                        +   '<td class="delIcon" style="width:5vw;text-align:left;"><div id="delIcon' + i + '" >'
-                        +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
-                        +           '<i class="fa fa-minus-circle"></i></button></div></td>'
-                        +   '<td class="routine"><div id="routineId' + i + '" '
-                        +           'style="font-size:larger;min-width:70vw;background-color:yellow;">'
-                        +                   Routines[i].rout_name + '</div></td>'
-                        + '</div>'                        
-                        + '<div style="position:absolute;z-index:999;margin-left:10vw">'
-                        + '<td class="start" style="min-width:30vw">'
-                        +       '<button class="routineButt" onClick="location.href=\'timer.html?' 
-                        +           'selectedRoutineNo=' + i 
-                        +           '\'">Start'
-                        +       '</button></td>'
-                        + '</div>'
-                        + '<div>'
-                        +   '<div style="position:absolute;">'
-                        +   '<td style="min-width:20vw;">'
-                        +   '</td>'
-                        +   '<td class="trash" onClick="deleteRout(' + i 
-                        +   ')" style="width:8vw;background:red"><div class="DelId" id="DelId' + i + '">DELETE</td></tr></div>';
-                        +   '</div>'
-                        + '</div></div>'
-*/
+
             document.getElementById('routineContainer').innerHTML += butn;
             doneClick()
             
