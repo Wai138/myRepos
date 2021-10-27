@@ -91,7 +91,7 @@ overflow-y: scroll; ">
     $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
             sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
-            let butn = '<div style="white-space:nowrap;overflow:hidden;position:relative;height:5vw;" id="row' + i + '"> '
+            let butn = '<div style="white-space:nowrap;overflow:hidden;position:relative;height:10vw;" id="row' + i + '"> '
                         + '<span style="position:relative" id="div' + i + '">'
                         +   '<span class="delIcon" id="delIcon' + i + '" >'
                         +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
