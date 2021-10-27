@@ -1,17 +1,63 @@
+
+.container {
+    height: 200px;
+    position: relative;
+    border: 3px solid green;
+  }
+  
+  .vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 10%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+.oneThird {
+    width: 33.3333vw;
+}
+.routineTab {
+    font-weight:bold;
+
+}
+
 .routineButt {
-    height: 50%;
-    width: 100%;
-    background-color: lightpink;
+    height: 6vh;
+    width: 5vw;
+    border-radius: 20%;
+    color: white;
+
+    background-color: darkblue;
 }
 
 #routineContainer {
-    background-color: lightblue;
-    height: 20vw;
+    position: relative;
+
     width: 100vw;
-    overflow-x: hidden;
+    overflow-x: scroll;
     overflow-y: auto;
 }
 
-.routineButt:hover {
-    background-color: yellow;
+#addTimer {
+    bottom: 0px;
+    position: fixed;
+    justify-self: center;
+}
+
+.routineDel {
+    color: red;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.DelId {
+    display:inline-block;
+    white-space:normal;
+    background:red;
+    width:6vw
+}
+
+.DelId:hover {
+    background-color: greenyellow;
 }
