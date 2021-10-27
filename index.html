@@ -70,7 +70,7 @@ overflow-y: scroll; ">
     </table>
 </div>
 <br><br>
-<div id="routineContainer" style="max-height: 80vh;width:50vw;position: relative;"></div>
+<div id="routineContainer" style="max-height: 80vh;width:95vw;position: relative;"></div>
 
 <div style="position: fixed;">
 <table><tr>
@@ -91,16 +91,16 @@ overflow-y: scroll; ">
     $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
             sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
-            let butn = '<div style="white-space:nowrap;overflow:hidden;position:relative;height:8vh;" id="row' + i + '"> '
+            let butn = '<div style="width:95vw;white-space:nowrap;overflow:hidden;position:relative;height:8vh;" id="row' + i + '"> '
                         + '<span style="position:relative" id="div' + i + '">'
                         +   '<span class="delIcon" id="delIcon' + i + '" >'
                         +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
                         +           '<i class="fa fa-minus-circle"></i></button></span>'
                         +   '<span class="routine" id="routineId' + i + '" '
-                        +           'style="display:inline-block;font-size:larger;min-width:50vw;background-color:yellow;">'
+                        +           'style="display:inline-block;font-size:larger;min-width:95vw;background-color:yellow;">'
                         +                   Routines[i].rout_name + '</span>'
                         + '</span>'                        
-                        + '<span class="start" style="min-width:30vw;position:fixed;z-index:999;margin-left:-5vw">'
+                        + '<span class="start" style="min-width:8vw;position:fixed;z-index:10;margin-left:-15vw">'
                         +       '<button class="routineButt" onClick="location.href=\'timer.html?' 
                         +           'selectedRoutineNo=' + i 
                         +           '\'">Start'
@@ -108,9 +108,9 @@ overflow-y: scroll; ">
                         + '</span>'
                         + '<span>'
                         +   '<span style="position:relative;">'
-                        +       '<span style="display:inline-block;min-width:5vw;"></span>'
-                        +       '<span class="DelId" onClick="deleteRout(' + i +')"'
-                        +           ' id="DelId' + i + '">DELETE</span>'; 
+//                        +       '<span style="display:inline-block;min-width:5vw;"></span>'
+                        +       '<button style="z-index:99" class="DelId" onClick="deleteRout(' + i +')"'
+                        +           ' id="DelId' + i + '">DELETE</button>'; 
                         +   '</span>'
                         + '</span></div>'
 /*                        

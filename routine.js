@@ -35,26 +35,9 @@ function doneClick() {
 }
 
 function shiftDel (i) {
-    let r, s, t;
-/*    r = document.getElementById("routineContainer")
-    r.style.position = "fixed";
-    s = document.getElementById("row" + i)
-    s.style.position = "relative"
-
-    s = document.getElementById("row0")
-    s.style.position = "fixed"
-    s = document.getElementById("row1")
-    s.style.position = "fixed"
-    t = document.querySelector("#div" + i)
-    t.style.position = "static"
-*/    t = document.querySelector("#DelId" + i)
+    let t = document.querySelector("#DelId" + i)
     t.scrollIntoView({ inline: "start"})
-    console.log('shiftDel:' + i)
-/*  s = document.getElementById("row" + i)
-    s.style.position = "inherit"
-    r = document.getElementById("routineContainer")
-    r.style.position = "relative";
-*/
+//    document.getElementById("start" + i).style.display="none";
 }
 
     function runRoutine(i) {
