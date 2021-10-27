@@ -8,78 +8,150 @@
     <script src="https://kit.fontawesome.com/9e453a3d0a.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="routine.css">
-
+    <script>
+        function setCookie(cname,cvalue,exdays) {
+          const d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          let expires = "expires=" + d.toGMTString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        
+        function getCookie(cname) {
+          let name = cname + "=";
+          let decodedCookie = decodeURIComponent(document.cookie);
+          let ca = decodedCookie.split(';');
+          for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        }
+        
+        function checkCookie() {
+          let Routines = getCookie("Routines");
+          if (Routines != "") {
+            setupRoutines();
+          } else {
+              Routines = [];
+//             user = prompt("Please enter your name:","");
+//             if (user != "" && user != null) {
+//               setCookie("username", user, 30);
+          }
+          return Routines;
+        }
+        </script>
 </head>
-<body>
-<!-- <iframe name='iframe' id='iframe' src='Routines.json' onload='readfile()'></iframe> -->    
-    <div id="routineContainer"></div>
 
-    <div><a href="index.html">Back</a></div>
+    <body style="overflow-x:hidden;margin: 0; overflow: hidden;  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+scrollbar-width: none; /* for Firefox */
+overflow-y: scroll; ">
+
+<div style="position: fixed;">
+    <table><tr>
+        <td class="oneThird"></td>
+        <td class="oneThird"><div align=center style="height: 5vh;background-color: white;color: black;" id="clockTime"></div></td>
+        <td class="oneThird"></td>
+    </tr></table>
+    <br>
+</div>
+<br>
+<div style="position: fixed;">
+    <table><tr>
+        <td class="oneThird"></td>
+        <td class="oneThird"><div align=center style="height: 5vh;">Interval Timer</div></td>
+        <td class="oneThird"><div align=right id="divEditDone">
+            <button id="Edit" onclick="editClick()">Edit</button></div>
+            </td></tr>
+    </table>
+</div>
+<br><br>
+<div id="routineContainer" style="max-height: 80vh;width:50vw;position: relative;"></div>
+
+<div style="position: fixed;">
+<table><tr>
+    <td class="oneThird"></td>
+    <td class="oneThird"><div align=center style="background-color: yellow;"><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
+    <td class="oneThird"></td>
+</tr></table>
+</div>
+
 </body>
 <!--        <button class="routineButt" onClick="location.href='timer.html?th=0&tm=0&ts=7&rh=0&rm=0&rs=12&exer=Jumping'">1</button>
         <button class="routineButt" onClick="runRoutine()">2</button>
         <button class="routineButt">3</button>
 -->
-<script>
-/*    app.UseCors(builder => builder
-.AllowAnyOrigin()
-.AllowAnyMethod()
-.AllowAnyHeader()
-    )
-
-    const logFileText = async file => {
-    const response = await fetch(file)
-    const text = await response.text()
-    return text;
-}
-
-    const Routines = JSON.parse (logFileText('Routines.json'));
-*/
-    function readfile() {
-/*        console.log('inside readfile')
-        const file = './Routines.json';
-        const reader = new FileReader();
-        if (!file) return
-        reader.onload = (e) => {
-            // e.target points to the reader
-            const textContent = e.target.result;
-            const Routines = JSON.parse(textContent);
-            console.log(`The content of ${file.name} is ${textContent}`)
-        }
-        reader.onerror = (e) => {
-            const error = e.target.error
-            console.error(`Error occured while reading ${file.name}`, error)
-        }
-        reader.readAsText(file)
-        console.log('going out')
-        
-        var frameObj = document.getElementById('iframe');
-
-        console.log('frameObj: ' + frameObj);
-        var elmnt = iframe.contentWindow.document.getElementsByTagName("pre")[0];
-        elmnt.style.color = "yellow";        
-        console.log('contentWindow: ' + frameObj.contentWindow)
-        console.log('contentWindow document: ' + frameObj.contentWindow.document)
-        var frameContent = frameObj.contentWindow.document.text;
-        console.log (frameContent)
-        var       Routines = JSON.parse (frameContent);
-    */        }
-</script>
 
 <script> 
-   
+//    Routines = checkCookie();
     $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
             sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
-            let butn = '<button class="routineButt" onClick="location.href=\'timer.html?' 
-                        + 'selectedRoutineNo=' + i +'\'">' + Routines[i].rout_name
-                        + '</button>';
-
+            let butn = '<div style="white-space:nowrap;overflow:hidden;position:relative;height:5vw;" id="row' + i + '"> '
+                        + '<span style="position:relative" id="div' + i + '">'
+                        +   '<span class="delIcon" id="delIcon' + i + '" >'
+                        +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
+                        +           '<i class="fa fa-minus-circle"></i></button></span>'
+                        +   '<span class="routine" id="routineId' + i + '" '
+                        +           'style="display:inline-block;font-size:larger;min-width:50vw;background-color:yellow;">'
+                        +                   Routines[i].rout_name + '</span>'
+                        + '</span>'                        
+                        + '<span class="start" style="min-width:30vw;position:fixed;z-index:999;margin-left:-5vw">'
+                        +       '<button class="routineButt" onClick="location.href=\'timer.html?' 
+                        +           'selectedRoutineNo=' + i 
+                        +           '\'">Start'
+                        +       '</button>'
+                        + '</span>'
+                        + '<span>'
+                        +   '<span style="position:relative;">'
+                        +       '<span style="display:inline-block;min-width:5vw;"></span>'
+                        +       '<span class="DelId" onClick="deleteRout(' + i +')"'
+                        +           ' id="DelId' + i + '">DELETE</span>'; 
+                        +   '</span>'
+                        + '</span></div>'
+/*                        
+            let butn = '<div style="position:absolute"><tr class="routineTab" id="row' + i + '" '
+                        + 'style="height:5%;">'
+                        + '<div style="position:fixed" id="div' + i + '">'
+                        +   '<td class="delIcon" style="width:5vw;text-align:left;"><div id="delIcon' + i + '" >'
+                        +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
+                        +           '<i class="fa fa-minus-circle"></i></button></div></td>'
+                        +   '<td class="routine"><div id="routineId' + i + '" '
+                        +           'style="font-size:larger;min-width:70vw;background-color:yellow;">'
+                        +                   Routines[i].rout_name + '</div></td>'
+                        + '</div>'                        
+                        + '<div style="position:absolute;z-index:999;margin-left:10vw">'
+                        + '<td class="start" style="min-width:30vw">'
+                        +       '<button class="routineButt" onClick="location.href=\'timer.html?' 
+                        +           'selectedRoutineNo=' + i 
+                        +           '\'">Start'
+                        +       '</button></td>'
+                        + '</div>'
+                        + '<div>'
+                        +   '<div style="position:absolute;">'
+                        +   '<td style="min-width:20vw;">'
+                        +   '</td>'
+                        +   '<td class="trash" onClick="deleteRout(' + i 
+                        +   ')" style="width:8vw;background:red"><div class="DelId" id="DelId' + i + '">DELETE</td></tr></div>';
+                        +   '</div>'
+                        + '</div></div>'
+*/
             document.getElementById('routineContainer').innerHTML += butn;
+            doneClick()
+            
 //            document.getElementsByTagName('button')[2].scrollIntoView();
         }
+        
+    let r = document.querySelector(".routine")
+    r.scrollIntoView({ inline: "start"})
+
     });
     </script>
+
     <script>
         const Routines = 
         [
@@ -238,7 +310,7 @@
                 },
                 {
                     "set_name": "Using Equipment",
-                    "set_iter": 2,
+                    "set_iter": 1,
                      "Exercises": [
                         {
                             "exer_name": "Rolling wheel",
