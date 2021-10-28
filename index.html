@@ -51,26 +51,29 @@
 scrollbar-width: none; /* for Firefox */
 overflow-y: scroll; ">
 
-<div style="position: fixed;">
-    <table><tr>
-        <td class="oneThird"></td>
-        <td class="oneThird"><div align=center id="clockTime"></div></td>
-        <td class="oneThird"></td>
-    </tr></table>
-    <br>
+<div id="header">
+    <div style="position: fixed;">
+        <table><tr>
+            <td class="oneThird"></td>
+            <td class="oneThird"><div align=center id="clockTime"></div></td>
+            <td class="oneThird"></td>
+        </tr></table>
+        <br>
+    </div>
+    <br><br>
+    <div style="position: fixed;">
+        <table><tr>
+            <td class="oneThird"></td>
+            <td class="oneThird"><div align=center style="height: 5vh;">Interval Timer</div></td>
+            <td class="oneThird"><div align=right id="divEditDone">
+                <button id="Edit" onclick="editClick()">Edit</button></div>
+                </td></tr>
+        </table>
+    </div>
+    <br><br>
 </div>
-<br>
-<div style="position: fixed;">
-    <table><tr>
-        <td class="oneThird"></td>
-        <td class="oneThird"><div align=center style="height: 5vh;">Interval Timer</div></td>
-        <td class="oneThird"><div align=right id="divEditDone">
-            <button id="Edit" onclick="editClick()">Edit</button></div>
-            </td></tr>
-    </table>
-</div>
-<br><br>
-<div id="routineContainer" style="max-height: 80vh;width:95vw;position: relative;"></div>
+
+<div id="routineContainer" style="max-height: 80vh;width:98vw;position: fixed;overflow: hidden;overflow-y: scroll;"></div>
 
 <div style="position: fixed;">
 <table><tr>
@@ -88,40 +91,43 @@ overflow-y: scroll; ">
 
 <script> 
 //    Routines = checkCookie();
+    var sDId = "startDelId";
     $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
             sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
             let butn = '<div style="width:95vw;white-space:nowrap;overflow:hidden;position:relative;height:8vh;" id="row' + i + '"> '
                         + '<span style="position:relative" id="div' + i + '">'
                         +   '<span class="delIcon" id="delIcon' + i + '" >'
-                        +           '<button class="routineDel" onClick="shiftDel(' + i + ')">'
+                        +           '<button class="routineDel" style="min-width:5vw" onClick="shiftDel(' + i + ')">'
                         +           '<i class="fa fa-minus-circle"></i></button></span>'
                         +   '<span class="routine" id="routineId' + i + '" '
-                        +           'style="display:inline-block;font-size:larger;min-width:95vw;background-color:yellow;">'
+                        +           'style="display:inline-block;font-size:larger;min-width:95vw;">'
                         +                   Routines[i].rout_name + '</span>'
                         + '</span>'                        
-                        + '<span class="start" style="width:auto;position:fixed;z-index:10;margin-left:-15vw">'
-                        +       '<button style="width:fit-content;" class="routineButt" onClick="location.href=\'timer.html?' 
-                        +           'selectedRoutineNo=' + i 
-                        +           '\'">Start'
+                        + '<span id="spanStartDel' + i + '"style="width:auto;position:relative;z-index:10;margin-left:-25vw">'
+                        +       '<button id="' + sDId + i + '" style="width:fit-content;" class="routineButt">'
                         +       '</button>'
                         + '</span>'
                         + '<span>'
                         +   '<span style="position:relative;">'
 //                        +       '<span style="display:inline-block;min-width:5vw;"></span>'
-                        +       '<button style="width=auto;z-index:99" class="DelId" onClick="deleteRout(' + i +')"'
-                        +           ' id="DelId' + i + '">DELETE</button>'; 
+
+//                        +       '<button style="width=auto;z-index:99" class="DelId" onClick="deleteRout(' + i +')"'
+//                        +           ' id="DelId' + i + '">DELETE</button>'; 
                         +   '</span>'
                         + '</span></div>'
 
             document.getElementById('routineContainer').innerHTML += butn;
-            doneClick()
+
             
 //            document.getElementsByTagName('button')[2].scrollIntoView();
         }
-        
-    let r = document.querySelector(".routine")
-    r.scrollIntoView({ inline: "start"})
+    doneClick(sDId);
+//    let r = document.querySelector(".routine")
+//    r.scrollIntoView({ inline: "start"})
+    document.getElementById("routineContainer").style.marginTop = 13;
+    document.getElementById("routineContainer").style.marginBottom = 90;
+    document.getElementById("routineContainer").scrollTop = 0;
 
     });
     </script>
@@ -244,7 +250,634 @@ overflow-y: scroll; ">
             ]
         },
         {
-            "rout_name": "Core  Exercise",
+            "rout_name": "Core1  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core2  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core3  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core4  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core5  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core6  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core7  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core8  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core9  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core10  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core11  Exercise",
+            "rSets": [
+                {                
+                    "set_name": "On exercise mat",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Mountain climbing",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 2
+                        },
+                        {
+                            "exer_name": "Twist left and right",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 3,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 5
+                        },
+                        {
+                            "exer_name": "Draw circle with legs",
+                            "exer_iter": 1,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 4,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 3
+                        }
+                    ]
+                },
+                {
+                    "set_name": "Using Equipment",
+                    "set_iter": 1,
+                     "Exercises": [
+                        {
+                            "exer_name": "Rolling wheel",
+                            "exer_iter": 3,
+                            "timer_exer_h": 0,
+                            "timer_exer_m": 0,
+                            "timer_exer_s": 7,
+                            "timer_rest_h": 0,
+                            "timer_rest_m": 0,
+                            "timer_rest_s": 8
+                        }
+                    ]
+                } 
+            ]
+        },
+        {
+            "rout_name": "Core12  Exercise",
             "rSets": [
                 {                
                     "set_name": "On exercise mat",

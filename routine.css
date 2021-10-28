@@ -30,15 +30,15 @@
     height: 6vh;
     width: 5vw;
     border-radius: 20%;
-    color: white;
 
-    background-color: darkblue;
 }
 
 #routineContainer {
     position: relative;
-
+    background-color: rgb(209, 153, 255);
     width: 100vw;
+    height:95vw;
+    margin-bottom: -5vw;
 
 }
 
