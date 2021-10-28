@@ -77,7 +77,7 @@ overflow-y: scroll; ">
 
 <div style="position: fixed;">
 <table><tr>
-    <td style="width: 100vw;"><div align=center><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
+    <td style="width: 95vw;"><div align=center><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
 </tr></table>
 </div>
 
@@ -89,21 +89,21 @@ overflow-y: scroll; ">
 
 <script> 
 //    Routines = checkCookie();
-    var sDId = "startDelId";
+    var sDIdLit = "startDelId";
     $(document).ready(function() {
         for (i=0;i<Routines.length;i++){
             sessionStorage.setItem('Routine' + i, JSON.stringify(Routines[i]));
             let butn = '<div style="width:95vw;white-space:nowrap;overflow:hidden;position:relative;height:8vh;" id="row' + i + '"> '
                         + '<span style="position:relative" id="div' + i + '">'
                         +   '<span class="delIcon" id="delIcon' + i + '" >'
-                        +           '<button class="routineDel" style="min-width:5vw" onClick="shiftDel(' + i + ', sDId)">'
+                        +           '<button class="routineDel" style="min-width:5vw" onClick="dispDelBtn(' + i + ', sDIdLit)">'
                         +           '<i class="fa fa-minus-circle"></i></button></span>'
                         +   '<span class="routine" id="routineId' + i + '" '
                         +           'style="display:inline-block;font-size:larger;min-width:95vw;">'
                         +                   Routines[i].rout_name + '</span>'
                         + '</span>'                        
-                        + '<span id="spanStartDel' + i + '"style="width:auto;position:relative;z-index:10;margin-left:-65vw">'
-                        +       '<button id="' + sDId + i + '" style="width:fit-content;" class="routineButt">Start'
+                        + '<span id="spanStartDel' + i + '"style="width:auto;position:relative;z-index:10;margin-left:-30vw">'
+                        +       '<button id="' + sDIdLit + i + '" style="width:fit-content;" class="routineButt">Start'
                         +       '</button>'
                         + '</span>'
                         + '<span>'
@@ -120,7 +120,7 @@ overflow-y: scroll; ">
             
 //            document.getElementsByTagName('button')[2].scrollIntoView();
         }
-        doneClick(sDId);
+        doneClick(sDIdLit);
 //    let r = document.querySelector(".routine")
 //    r.scrollIntoView({ inline: "start"})
     document.getElementById("routineContainer").style.marginTop = 13;

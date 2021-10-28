@@ -13,37 +13,25 @@ function deleteRout (i) {
     document.getElementById("row"+i).remove();
 }
 
-
-function editClick(sDId) {
+function editClick(sDIdLit) {
     let d = document.querySelector('.routineDel');
     var routineDelWidth = d.offsetWidth;
 
     let r, s;
     s = document.querySelector("#routineContainer").scrollTop;
-
-    r = document.querySelectorAll(".spanStartDel");
-    r.forEach(function (elm) {
-        elm.style.position = "fixed";
-    });
 
     r = document.querySelectorAll(".delIcon")
     r.forEach(function (elm) {
         elm.scrollIntoView({ inline: "start" });
     }); 
     document.getElementById("divEditDone").innerHTML 
-            = '<button id="Done" onclick="doneClick(\'' + sDId + '\')">Done</button>';
+            = '<button id="Done" onclick="doneClick(\'' + sDIdLit + '\')">Done</button>';
 
-    r = document.querySelectorAll(".spanStartDel");
-    r.forEach(function (elm) {
-        elm.style.position = "relative";
-
-    });
     document.querySelector("#routineContainer").scrollTop = s;
     $('.routineButt').css('margin-left', '-=' + routineDelWidth + 'px');
-    console.log('rr:' + routineDelWidth)
 }
 
-function doneClick(sDId) {
+function doneClick(sDIdLit) {
 
     let d = document.querySelector('.routineDel');
     var routineDelWidth = d.offsetWidth;
@@ -51,51 +39,36 @@ function doneClick(sDId) {
     let r, s;
     s = document.querySelector("#routineContainer").scrollTop;
 
-    r = document.querySelectorAll(".spanStartDel");
-    r.forEach(function (elm) {
-        elm.style.position = "fixed";
-    });
-
     r = document.querySelectorAll(".routine")
     r.forEach(function (elm) {
             elm.scrollIntoView({ inline: "start" });
         }); 
-    document.getElementById("divEditDone").innerHTML 
-            = '<button id="Edit" onclick="editClick(\'' + sDId + '\')">Edit</button>'
 
-    r = document.querySelectorAll(".spanStartDel");
-    r.forEach(function (elm) {
-        elm.style.position = "relative";
-    });
+    document.getElementById("divEditDone").innerHTML 
+        = '<button id="Edit" onclick="editClick(\'' + sDIdLit + '\')">Edit</button>'
 
     let elm = document.querySelectorAll(".routineButt");
     elm.forEach(function(s) {
-        let j = s.id.length - sDId.length;
+        let j = s.id.length - sDIdLit.length;
         let i = s.id.substr(-1 * j);
-        console.log ('i:' + i + ' j:' + j + ' sDId:' + sDId.length + ' s.id:' + s.id.length)
         s.setAttribute('onclick',  'location.href=\'timer.html?selectedRoutineNo=' + i + '\'');
         s.style.color = "white";
         s.style.backgroundColor ="darkblue";
         s.innerText = 'Start';
     })
+
     $('.routineButt').css('margin-left', '+=' + routineDelWidth + 'px');
     document.querySelector("#routineContainer").scrollTop = s;
 }
 
-function shiftDel (i, sDId) {
-    let s = document.getElementById(sDId + i);
+function dispDelBtn (i, sDIdLit) {
+    let s = document.getElementById(sDIdLit + i);
     s.setAttribute('onclick',  'deleteRout(' + i +');');
     s.style.color = "yellow";
     s.style.backgroundColor = "red";
     s.innerText = 'DELETE';
-//    let t = document.querySelector("#DelId" + i)
-//    t.scrollIntoView({ inline: "start"})
-//    document.getElementById("start" + i).style.display="none";
 }
 
-    function runRoutine(i) {
-        
-        
-        console.log(url)
-        window.location.href = url;
-    }
+function runRoutine(i) {
+    window.location.href = url;
+}
