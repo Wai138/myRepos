@@ -72,8 +72,8 @@ function doneClick(sDId) {
     document.querySelector("#routineContainer").scrollTop = s;
 }
 
-function shiftDel (i) {
-    let s = document.getElementById('startDelId' + i);
+function shiftDel (i, sDId) {
+    let s = document.getElementById(sDId + i);
     s.setAttribute('onclick',  'deleteRout(' + i +');');
     s.style.color = "yellow";
     s.style.backgroundColor = "red";

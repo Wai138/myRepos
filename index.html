@@ -77,9 +77,7 @@ overflow-y: scroll; ">
 
 <div style="position: fixed;">
 <table><tr>
-    <td class="oneThird"></td>
-    <td class="oneThird"><div align=center><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
-    <td class="oneThird"></td>
+    <td style="width: 100vw;"><div align=center><a href="addTimer.html" id="addTimer">Add Timer</a></div></td>
 </tr></table>
 </div>
 
@@ -98,14 +96,14 @@ overflow-y: scroll; ">
             let butn = '<div style="width:95vw;white-space:nowrap;overflow:hidden;position:relative;height:8vh;" id="row' + i + '"> '
                         + '<span style="position:relative" id="div' + i + '">'
                         +   '<span class="delIcon" id="delIcon' + i + '" >'
-                        +           '<button class="routineDel" style="min-width:5vw" onClick="shiftDel(' + i + ')">'
+                        +           '<button class="routineDel" style="min-width:5vw" onClick="shiftDel(' + i + ', sDId)">'
                         +           '<i class="fa fa-minus-circle"></i></button></span>'
                         +   '<span class="routine" id="routineId' + i + '" '
                         +           'style="display:inline-block;font-size:larger;min-width:95vw;">'
                         +                   Routines[i].rout_name + '</span>'
                         + '</span>'                        
                         + '<span id="spanStartDel' + i + '"style="width:auto;position:relative;z-index:10;margin-left:-65vw">'
-                        +       '<button id="' + sDId + i + '" style="width:fit-content;" class="routineButt">'
+                        +       '<button id="' + sDId + i + '" style="width:fit-content;" class="routineButt">Start'
                         +       '</button>'
                         + '</span>'
                         + '<span>'
