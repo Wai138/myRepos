@@ -14,7 +14,9 @@ function deleteRout (i) {
 }
 
 
-function editClick() {
+function editClick(sDId) {
+    let d = document.querySelector('.routineDel');
+    var routineDelWidth = d.offsetWidth;
 
     let r, s;
     s = document.querySelector("#routineContainer").scrollTop;
@@ -28,7 +30,8 @@ function editClick() {
     r.forEach(function (elm) {
         elm.scrollIntoView({ inline: "start" });
     }); 
-    document.getElementById("divEditDone").innerHTML = '<button id="Done" onclick="doneClick()">Done</button>';
+    document.getElementById("divEditDone").innerHTML 
+            = '<button id="Done" onclick="doneClick(\'' + sDId + '\')">Done</button>';
 
     r = document.querySelectorAll(".spanStartDel");
     r.forEach(function (elm) {
@@ -36,9 +39,14 @@ function editClick() {
 
     });
     document.querySelector("#routineContainer").scrollTop = s;
+    $('.routineButt').css('margin-left', '-=' + routineDelWidth + 'px');
+    console.log('rr:' + routineDelWidth)
 }
 
 function doneClick(sDId) {
+
+    let d = document.querySelector('.routineDel');
+    var routineDelWidth = d.offsetWidth;
 
     let r, s;
     s = document.querySelector("#routineContainer").scrollTop;
@@ -52,7 +60,8 @@ function doneClick(sDId) {
     r.forEach(function (elm) {
             elm.scrollIntoView({ inline: "start" });
         }); 
-    document.getElementById("divEditDone").innerHTML = '<button id="Edit" onclick="editClick()">Edit</button>'
+    document.getElementById("divEditDone").innerHTML 
+            = '<button id="Edit" onclick="editClick(\'' + sDId + '\')">Edit</button>'
 
     r = document.querySelectorAll(".spanStartDel");
     r.forEach(function (elm) {
@@ -69,6 +78,7 @@ function doneClick(sDId) {
         s.style.backgroundColor ="darkblue";
         s.innerText = 'Start';
     })
+    $('.routineButt').css('margin-left', '+=' + routineDelWidth + 'px');
     document.querySelector("#routineContainer").scrollTop = s;
 }
 
